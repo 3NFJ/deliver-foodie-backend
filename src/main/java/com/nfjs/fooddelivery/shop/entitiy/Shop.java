@@ -52,7 +52,7 @@ public class Shop {
     private ShopStatus shopStatus;
 
 
-    public static Shop toDomain(ShopRequestDto requestDto) {
+    public static Shop toEntity(ShopRequestDto requestDto) {
         return Shop.builder()
                 .userId(requestDto.getUserId())
                 .name(requestDto.getName())
