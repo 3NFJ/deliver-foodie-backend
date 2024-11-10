@@ -54,15 +54,26 @@ public class Shop {
 
     public static Shop toEntity(ShopRequestDto requestDto) {
         return Shop.builder()
-                .userId(requestDto.getUserId())
-                .name(requestDto.getName())
-                .categoryId(requestDto.getCategoryId())
-                .address(requestDto.getAddress())
-                .phoneNumber(requestDto.getPhoneNumber())
-                .openingTime(requestDto.getOpeningTime())
-                .closingTime(requestDto.getClosingTime())
-                .minOrderAmount(requestDto.getMinOrderAmount())
-                .shopStatus(requestDto.getShopStatus())
+                .userId(requestDto.userId())
+                .name(requestDto.name())
+                .categoryId(requestDto.categoryId())
+                .address(requestDto.address())
+                .phoneNumber(requestDto.phoneNumber())
+                .openingTime(requestDto.openingTime())
+                .closingTime(requestDto.closingTime())
+                .minOrderAmount(requestDto.minOrderAmount())
+                .shopStatus(requestDto.shopStatus())
                 .build();
+    }
+
+    public void update(ShopRequestDto requestDto) {
+        this.name = requestDto.name();
+        this.categoryId = requestDto.categoryId();
+        this.address = requestDto.address();
+        this.phoneNumber = requestDto.phoneNumber();
+        this.openingTime = requestDto.openingTime();
+        this.closingTime = requestDto.closingTime();
+        this.minOrderAmount = requestDto.minOrderAmount();
+        this.shopStatus = requestDto.shopStatus();
     }
 }
