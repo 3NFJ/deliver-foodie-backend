@@ -10,4 +10,6 @@ public interface ShopService {
     ShopResponseDto createShop(ShopRequestDto requestDto);
 
     ShopResponseDto updateShop(UUID shopId, ShopRequestDto requestDto);
+
+    void deleteShop(UUID shopId, UUID userId);
 }

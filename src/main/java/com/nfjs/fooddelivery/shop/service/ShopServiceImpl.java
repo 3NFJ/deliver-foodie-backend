@@ -44,4 +44,13 @@ public class ShopServiceImpl implements ShopService {
 
         return ShopResponseDto.from(entity);
     }
+
+    @Override
+    public void deleteShop(UUID shopId, UUID userId) {
+        Shop entity = shopRepository.findById(shopId).orElseThrow(() -> new NullPointerException("가게 정보를 찾을 수 없습니다."));
+
+        //userRepository.findById(userId) 검증, 가게주인 여부 일치 검증
+
+        entity.delete();
+    }
 }

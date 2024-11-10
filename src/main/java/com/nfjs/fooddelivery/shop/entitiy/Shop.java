@@ -77,4 +77,8 @@ public class Shop {
         this.shopStatus = requestDto.shopStatus();
         //todo 업데이트 시간, 작성자 값 추가
     }
+
+    public void delete() {
+        // 삭제일,삭제자 컬럼 업데이트
+    }
 }

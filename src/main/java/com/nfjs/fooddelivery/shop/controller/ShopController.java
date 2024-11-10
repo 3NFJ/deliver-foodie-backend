@@ -30,4 +30,11 @@ public class ShopController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
+
+    @PatchMapping("/shops/{shopId}")
+    public ResponseEntity<Object> deleteShop(@PathVariable UUID shopId, @RequestParam UUID userId) {
+        shopService.deleteShop(shopId, userId);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }
