@@ -75,5 +75,6 @@ public class Shop {
         this.closingTime = requestDto.closingTime();
         this.minOrderAmount = requestDto.minOrderAmount();
         this.shopStatus = requestDto.shopStatus();
+        //todo 업데이트 시간, 작성자 값 추가
     }
 }
