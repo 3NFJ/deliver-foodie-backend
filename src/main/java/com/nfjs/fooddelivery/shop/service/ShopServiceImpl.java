@@ -31,7 +31,7 @@ public class ShopServiceImpl implements ShopService {
             }
         }
 
-        Shop entity = shopRepository.save(Shop.toEntity(requestDto));
+        Shop entity = shopRepository.save(ShopRequestDto.toEntity(requestDto));
 
         return ShopResponseDto.from(entity);
     }

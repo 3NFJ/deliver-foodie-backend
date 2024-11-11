@@ -1,5 +1,6 @@
 package com.nfjs.fooddelivery.shop.dto;
 
+import com.nfjs.fooddelivery.shop.entitiy.Shop;
 import com.nfjs.fooddelivery.shop.enums.ShopStatus;
 import lombok.Getter;
 
@@ -15,4 +16,18 @@ public record ShopRequestDto(UUID userId,
                              LocalTime closingTime,
                              int minOrderAmount,
                              ShopStatus shopStatus) {
+
+    public static Shop toEntity(ShopRequestDto requestDto) {
+        return Shop.builder()
+                .userId(requestDto.userId)
+                .name(requestDto.name)
+                .categoryId(requestDto.categoryId)
+                .address(requestDto.address)
+                .phoneNumber(requestDto.phoneNumber)
+                .openingTime(requestDto.openingTime)
+                .closingTime(requestDto.closingTime)
+                .minOrderAmount(requestDto.minOrderAmount)
+                .shopStatus(requestDto.shopStatus)
+                .build();
+    }
 }

@@ -51,18 +51,4 @@ public class Shop {
     @Column(nullable = false)
     private ShopStatus shopStatus;
 
-
-    public static Shop toEntity(ShopRequestDto requestDto) {
-        return Shop.builder()
-                .userId(requestDto.getUserId())
-                .name(requestDto.getName())
-                .categoryId(requestDto.getCategoryId())
-                .address(requestDto.getAddress())
-                .phoneNumber(requestDto.getPhoneNumber())
-                .openingTime(requestDto.getOpeningTime())
-                .closingTime(requestDto.getClosingTime())
-                .minOrderAmount(requestDto.getMinOrderAmount())
-                .shopStatus(requestDto.getShopStatus())
-                .build();
-    }
 }
