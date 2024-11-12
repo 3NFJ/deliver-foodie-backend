@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public record ShopResponseDto(
         UUID shopId,
-        UUID userId,
+        Long userId,
         String name,
         UUID categoryId,
         String address,
