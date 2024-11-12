@@ -7,6 +7,8 @@ import com.nfjs.fooddelivery.shop.dto.ShopResponseDto;
 import com.nfjs.fooddelivery.shop.entitiy.Shop;
 import com.nfjs.fooddelivery.shop.repository.ShopRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -67,4 +69,14 @@ public class ShopServiceImpl implements ShopService {
         //userName 조회
         shop.delete("user");
     }
+
+    @Override
+    public List<ShopResponseDto> getShopList(Pageable pageable) {
+        Page<Shop> shopList = shopRepository.findAll(pageable);
+
+        return shopList.stream()
+                .map(ShopResponseDto::from)
+                .toList();
+    }
+
 }
