@@ -7,7 +7,7 @@ import lombok.Getter;
 import java.time.LocalTime;
 import java.util.UUID;
 
-public record ShopRequestDto(UUID userId,
+public record ShopRequestDto(Long userId,
                              String name,
                              UUID categoryId,
                              String address,
