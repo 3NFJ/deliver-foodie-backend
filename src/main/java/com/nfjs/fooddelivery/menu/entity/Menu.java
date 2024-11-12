@@ -30,7 +30,7 @@ public class Menu {
     @Column(name = "menu_price", nullable = false)
     private int menuPrice;
 
-    @Column(name = "menu_image", length = 255)
+    @Column(name = "menu_image")
     private String menuImage;
 
     @Enumerated(EnumType.STRING)
