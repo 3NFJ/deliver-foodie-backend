@@ -73,4 +73,10 @@ public class ShopServiceImpl implements ShopService {
                 .toList();
     }
 
+    @Override
+    public ShopResponseDto getShopDetail(UUID shopId) {
+        Shop entity = shopRepository.findById(shopId).orElseThrow(() -> new NullPointerException("가게 정보를 찾을 수 없습니다."));
+
+        return ShopResponseDto.from(entity);
+    }
 }

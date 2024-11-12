@@ -48,4 +48,11 @@ public class ShopController {
 
         return ResponseEntity.status(HttpStatus.OK).body(shopList);
     }
+
+    @GetMapping("/shops/{shopId}")
+    public ResponseEntity<ShopResponseDto> getShopDetail(@PathVariable UUID shopId) {
+        ShopResponseDto responseDto = shopService.getShopDetail(shopId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+    }
 }
