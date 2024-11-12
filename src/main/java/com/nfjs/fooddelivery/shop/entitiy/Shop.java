@@ -24,7 +24,7 @@ public class Shop {
     private UUID shopId;
 
     @Column(name = "user_id", nullable = false)
-    private UUID userId;
+    private Long userId;
 
     @Column(nullable = false)
     private String name;
@@ -51,20 +51,6 @@ public class Shop {
     @Column(nullable = false)
     private ShopStatus shopStatus;
 
-
-    public static Shop toEntity(ShopRequestDto requestDto) {
-        return Shop.builder()
-                .userId(requestDto.userId())
-                .name(requestDto.name())
-                .categoryId(requestDto.categoryId())
-                .address(requestDto.address())
-                .phoneNumber(requestDto.phoneNumber())
-                .openingTime(requestDto.openingTime())
-                .closingTime(requestDto.closingTime())
-                .minOrderAmount(requestDto.minOrderAmount())
-                .shopStatus(requestDto.shopStatus())
-                .build();
-    }
 
     public void update(ShopRequestDto requestDto) {
         this.name = requestDto.name();
