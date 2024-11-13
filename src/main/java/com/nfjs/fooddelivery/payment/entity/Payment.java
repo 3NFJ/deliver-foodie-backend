@@ -2,7 +2,6 @@ package com.nfjs.fooddelivery.payment.entity;
 
 import com.nfjs.fooddelivery.order.entity.Order;
 import com.nfjs.fooddelivery.payment.enums.CardCompany;
-import com.nfjs.fooddelivery.payment.enums.InstallmentMonths;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -32,8 +31,7 @@ public class Payment {
     private CardCompany cardCompany;
 
     @Column(name = "installment_months")
-    @Enumerated(EnumType.STRING)
-    private InstallmentMonths installmentMonths;
+    private Integer installmentMonths;
 
     @Column(name = "payment_number", nullable = false)
     private String paymentNumber;
@@ -57,7 +55,7 @@ public class Payment {
     private LocalDateTime cancelledAt;
 
     @Builder
-    public Payment(Order order, CardCompany cardCompany, String cardNumber, InstallmentMonths installmentMonths, String paymentNumber, Boolean isInstallment) {
+    public Payment(Order order, CardCompany cardCompany, String cardNumber, Integer installmentMonths, String paymentNumber, Boolean isInstallment) {
         this.order = order;
         this.cardCompany = cardCompany;
         this.cardNumber = cardNumber;
