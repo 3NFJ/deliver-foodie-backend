@@ -1,5 +1,6 @@
 package com.nfjs.fooddelivery.menu.entity;
 
+import com.nfjs.fooddelivery.menu.dto.MenuRequestDto;
 import com.nfjs.fooddelivery.menu.enums.MenuStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -36,4 +37,12 @@ public class Menu {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private MenuStatus status;
+
+    public void update(MenuRequestDto requestDto) {
+        shopId = requestDto.shopId();
+        menuName = requestDto.menuName();
+        menuPrice = requestDto.menuPrice();
+        menuImage = requestDto.menuImage();
+        status = requestDto.status();
+    }
 }

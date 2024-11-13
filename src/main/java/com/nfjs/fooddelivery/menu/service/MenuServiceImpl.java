@@ -7,10 +7,9 @@ import com.nfjs.fooddelivery.menu.repository.MenuRepository;
 import com.nfjs.fooddelivery.menu.validation.MenuValidation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -22,13 +21,22 @@ public class MenuServiceImpl implements MenuService {
     public MenuResponseDto addMenu(UUID shopId, MenuRequestDto requestDto) {
         //shop 유효성 검증
 
-        String menuName = requestDto.menuName();
-        int menuPrice = requestDto.menuPrice();
-
-        menuValidation.addMenuValidation(menuName, menuPrice);
+        menuValidation.validateMenuDetails(requestDto);
 
         Menu entity = menuRepository.save(requestDto.toEntity());
 
         return MenuResponseDto.from(entity);
+    }
+
+    @Override
+    @Transactional
+    public MenuResponseDto updateMenu(UUID menuId, MenuRequestDto requestDto) {
+        Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new NullPointerException("메뉴가 존재하지 않습니다."));
+
+        menuValidation.validateMenuDetails(requestDto);
+
+        menu.update(requestDto);
+
+        return MenuResponseDto.from(menu);
     }
 }

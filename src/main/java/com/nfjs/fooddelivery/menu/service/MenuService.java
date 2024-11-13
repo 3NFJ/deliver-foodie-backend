@@ -8,4 +8,6 @@ import java.util.UUID;
 public interface MenuService {
 
     MenuResponseDto addMenu(UUID shopId, MenuRequestDto requestDto);
+
+    MenuResponseDto updateMenu(UUID menuId, MenuRequestDto requestDto);
 }

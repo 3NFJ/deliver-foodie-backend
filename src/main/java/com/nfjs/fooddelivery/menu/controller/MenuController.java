@@ -21,4 +21,11 @@ public class MenuController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
+
+    @PutMapping("/menus/{menuId}")
+    public ResponseEntity<MenuResponseDto> updateMenu(@PathVariable UUID menuId, @RequestBody MenuRequestDto requestDto) {
+        MenuResponseDto responseDto = menuService.updateMenu(menuId, requestDto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+    }
 }
