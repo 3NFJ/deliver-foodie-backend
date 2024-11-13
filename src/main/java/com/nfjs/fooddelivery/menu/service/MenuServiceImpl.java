@@ -8,9 +8,7 @@ import com.nfjs.fooddelivery.menu.validation.MenuValidation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -22,12 +20,9 @@ public class MenuServiceImpl implements MenuService {
     public MenuResponseDto addMenu(UUID shopId, MenuRequestDto requestDto) {
         //shop 유효성 검증
 
-        String menuName = requestDto.menuName();
-        int menuPrice = requestDto.menuPrice();
+        menuValidation.addMenuValidation(requestDto, shopId);
 
-        menuValidation.addMenuValidation(menuName, menuPrice);
-
-        Menu entity = menuRepository.save(requestDto.toEntity());
+        Menu entity = menuRepository.save(requestDto.toEntity(shopId));
 
         return MenuResponseDto.from(entity);
     }

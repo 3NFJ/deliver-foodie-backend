@@ -1,26 +1,25 @@
 package com.nfjs.fooddelivery.menu.entity;
 
+import com.nfjs.fooddelivery.common.entity.BaseEntity;
 import com.nfjs.fooddelivery.menu.enums.MenuStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.UUID;
 
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
-@Table(name = "menus")
+@Table(name = "p_menus")
 @Builder
-public class Menu {
+public class Menu extends BaseEntity {
     @Id
     @GeneratedValue
     @Column(name = "menu_id", nullable = false)
     private UUID menuId;
 
+    //todo Shop 엔티티 develop 반영 후 수정 필요
     @Column(name = "shop_id", nullable = false)
     private UUID shopId;
 
