@@ -1,5 +1,7 @@
 package com.nfjs.fooddelivery.shop.service;
 
+import com.nfjs.fooddelivery.common.excetpion.ErrorCode;
+import com.nfjs.fooddelivery.common.excetpion.ShopException;
 import com.nfjs.fooddelivery.shop.dto.ShopRequestDto;
 import com.nfjs.fooddelivery.shop.dto.ShopResponseDto;
 import com.nfjs.fooddelivery.shop.entitiy.Shop;
@@ -23,14 +25,13 @@ public class ShopServiceImpl implements ShopService {
 
         String requestShopName = requestDto.name();
         if (!Pattern.matches("^[a-zA-Z가-힣0-9]+$", requestShopName)) {
-            throw new IllegalStateException("가게 이름은 한글, 영어, 숫자만 포함 가능합니다.");
+            throw new ShopException(ErrorCode.INVALID_SHOP_NAME);
         }
 
         List<Shop> shopList = shopRepository.findAll();
         for (Shop shop : shopList) {
-            if (shop.getShopName()
-                    .equals(requestShopName)) {
-                throw new IllegalStateException("이미 존재하는 가게명 입니다.");
+            if (shop.getShopName().equals(requestShopName)) {
+                throw new ShopException(ErrorCode.DUPLICATE_SHOP_NAME);
             }
         }
 

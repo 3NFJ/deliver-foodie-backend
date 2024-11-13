@@ -4,20 +4,17 @@ import com.nfjs.fooddelivery.common.entity.BaseEntity;
 import com.nfjs.fooddelivery.shop.dto.ShopRequestDto;
 import com.nfjs.fooddelivery.shop.enums.ShopStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "shops", uniqueConstraints = {
+@Table(name = "p_shops", uniqueConstraints = {
         @UniqueConstraint(columnNames = "shop_name")
 })
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 public class Shop extends BaseEntity {

@@ -16,4 +16,10 @@ public class GlobalExceptionHandler {
     return ResponseEntity.badRequest()
         .body(new ErrorResponse(e.getMessage()));
   }
+
+  @ExceptionHandler(ShopException.class)
+  public ResponseEntity<ErrorResponse> handleShopException(ShopException e) {
+
+    return ResponseEntity.status(e.getErrorCode().getStatus()).body(new ErrorResponse(e.getMessage()));
+  }
 }
