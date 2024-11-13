@@ -22,7 +22,7 @@ public record ShopResponseDto(
         return new ShopResponseDto(
                 shop.getShopId(),
                 shop.getUserId(),
-                shop.getName(),
+                shop.getShopName(),
                 shop.getCategoryId(),
                 shop.getAddress(),
                 shop.getPhoneNumber(),

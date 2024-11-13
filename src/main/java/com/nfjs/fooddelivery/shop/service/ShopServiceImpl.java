@@ -28,7 +28,8 @@ public class ShopServiceImpl implements ShopService {
 
         List<Shop> shopList = shopRepository.findAll();
         for (Shop shop : shopList) {
-            if (shop.getName().equals(requestShopName)) {
+            if (shop.getShopName()
+                    .equals(requestShopName)) {
                 throw new IllegalStateException("이미 존재하는 가게명 입니다.");
             }
         }
