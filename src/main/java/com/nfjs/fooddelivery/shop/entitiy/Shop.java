@@ -66,4 +66,8 @@ public class Shop extends BaseEntity {
     public void delete() {
         // 삭제일,삭제자 컬럼 업데이트
     }
+
+    public void delete() {
+        // 삭제일,삭제자 컬럼 업데이트
+    }
 }
