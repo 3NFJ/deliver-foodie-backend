@@ -1,6 +1,7 @@
 package com.nfjs.fooddelivery.shop.entitiy;
 
 import com.nfjs.fooddelivery.common.entity.BaseEntity;
+import com.nfjs.fooddelivery.shop.dto.ShopRequestDto;
 import com.nfjs.fooddelivery.shop.enums.ShopStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -55,7 +56,7 @@ public class Shop extends BaseEntity {
 
 
     public void update(ShopRequestDto requestDto) {
-        this.name = requestDto.name();
+        this.shopName = requestDto.name();
         this.categoryId = requestDto.categoryId();
         this.address = requestDto.address();
         this.phoneNumber = requestDto.phoneNumber();
@@ -63,6 +64,5 @@ public class Shop extends BaseEntity {
         this.closingTime = requestDto.closingTime();
         this.minOrderAmount = requestDto.minOrderAmount();
         this.shopStatus = requestDto.shopStatus();
-        //todo 업데이트 시간, 작성자 값 추가
     }
 }
