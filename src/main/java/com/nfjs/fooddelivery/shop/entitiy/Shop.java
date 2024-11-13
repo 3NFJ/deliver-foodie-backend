@@ -1,6 +1,6 @@
 package com.nfjs.fooddelivery.shop.entitiy;
 
-import com.nfjs.fooddelivery.shop.dto.ShopRequestDto;
+import com.nfjs.fooddelivery.common.entity.BaseEntity;
 import com.nfjs.fooddelivery.shop.enums.ShopStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -19,7 +19,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Shop {
+public class Shop extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "shop_id")
