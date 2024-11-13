@@ -12,22 +12,24 @@ import java.time.LocalTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "shops")
+@Table(name = "shops", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "shop_name")
+})
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Shop {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "shop_id")
     private UUID shopId;
 
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
-    @Column(nullable = false)
-    private String name;
+    @Column(name = "shop_name",nullable = false)
+    private String shopName;
 
     @Column(name = "category_id", nullable = false)
     private UUID categoryId;

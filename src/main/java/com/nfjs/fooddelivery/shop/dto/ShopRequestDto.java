@@ -20,7 +20,7 @@ public record ShopRequestDto(Long userId,
     public static Shop toEntity(ShopRequestDto requestDto) {
         return Shop.builder()
                 .userId(requestDto.userId)
-                .name(requestDto.name)
+                .shopName(requestDto.name)
                 .categoryId(requestDto.categoryId)
                 .address(requestDto.address)
                 .phoneNumber(requestDto.phoneNumber)
