@@ -1,5 +1,6 @@
 package com.nfjs.fooddelivery.order.entity;
 
+import com.nfjs.fooddelivery.common.entity.BaseEntity;
 import com.nfjs.fooddelivery.order.dto.OrderCreateRequestDto;
 import com.nfjs.fooddelivery.order.enums.OrderStatus;
 import com.nfjs.fooddelivery.order.enums.PaymentMethod;
@@ -14,7 +15,7 @@ import java.util.UUID;
 @Table(name = "p_orders")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Order {
+public class Order extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
