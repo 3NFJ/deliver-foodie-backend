@@ -47,7 +47,7 @@ public class ShopServiceImpl implements ShopService {
 
         String shopName = requestDto.name();
         if (!Pattern.matches("^[a-zA-Z가-힣0-9]+$", shopName)) {
-            throw new IllegalStateException("가게 이름은 한글, 영어, 숫자만 포함 가능합니다.");
+            throw new ShopException(ErrorCode.INVALID_SHOP_NAME);
         }
 
         entity.update(requestDto);
