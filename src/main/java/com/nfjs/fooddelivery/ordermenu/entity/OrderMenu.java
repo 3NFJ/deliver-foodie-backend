@@ -39,4 +39,13 @@ public class OrderMenu extends BaseEntity {
 
     @Column(name = "total_price", nullable = false)
     private Integer totalPrice;
+
+    public OrderMenu(Order order, Menu menu, String menuName, Integer quantity, Integer menuPrice) {
+        this.order = order;
+        this.menu = menu;
+        this.menuName = menuName;
+        this.menuPrice = menuPrice;
+        this.quantity = quantity;
+        this.totalPrice = quantity * menuPrice;
+    }
 }
