@@ -33,5 +33,10 @@ public class BaseEntity {
   private LocalDateTime deletedAt;
 
   private String deletedBy;
+
+  public void delete(String deletedBy) {
+    this.deletedBy = deletedBy;
+    this.deletedAt = LocalDateTime.now();
+  }
 }
 

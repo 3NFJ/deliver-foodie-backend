@@ -1,5 +1,6 @@
 package com.nfjs.fooddelivery.menu.service;
 
+import com.nfjs.fooddelivery.common.excetpion.ErrorCode;
 import com.nfjs.fooddelivery.menu.dto.MenuRequestDto;
 import com.nfjs.fooddelivery.menu.dto.MenuResponseDto;
 import com.nfjs.fooddelivery.menu.entity.Menu;
@@ -7,6 +8,8 @@ import com.nfjs.fooddelivery.menu.repository.MenuRepository;
 import com.nfjs.fooddelivery.menu.validation.MenuValidation;
 import com.nfjs.fooddelivery.shop.entitiy.Shop;
 import com.nfjs.fooddelivery.shop.repository.ShopRepository;
+import com.nfjs.fooddelivery.user.entity.User;
+import com.nfjs.fooddelivery.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +22,7 @@ public class MenuServiceImpl implements MenuService {
     private final MenuRepository menuRepository;
     private final MenuValidation menuValidation;
     private final ShopRepository shopRepository;
+    private final UserRepository userRepository;
 
     @Override
     public MenuResponseDto addMenu(UUID shopId, MenuRequestDto requestDto) {
@@ -42,5 +46,18 @@ public class MenuServiceImpl implements MenuService {
         menu.update(requestDto);
 
         return MenuResponseDto.from(menu);
+    }
+
+    @Override
+    @Transactional
+    public void deleteMenu(UUID menuId, Long userId) {
+        Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new NullPointerException(ErrorCode.MENU_NOT_FOUND.getMessage()));
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalStateException(ErrorCode.USER_NOT_FOUND.getMessage()));
+
+        if (!menu.getShop().getUser().getUserId().equals(userId)) {
+            throw new IllegalStateException("유저 불일치");
+        }
+
+        menu.delete(user.getUsername());
     }
 }

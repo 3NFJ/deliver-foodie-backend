@@ -29,4 +29,11 @@ public class MenuController {
 
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
+
+    @PatchMapping("/menus/{menuId}")
+    public ResponseEntity<MenuResponseDto> deleteMenu(@PathVariable UUID menuId, @RequestParam Long userId) {
+        menuService.deleteMenu(menuId, userId);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }
