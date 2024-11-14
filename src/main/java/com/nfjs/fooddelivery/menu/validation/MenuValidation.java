@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 @Service
 @RequiredArgsConstructor
 public class MenuValidation {
+    private final MenuRepository menuRepository;
 
     public void addMenuValidation(MenuRequestDto requestDto, UUID shopId) {
         if (!Pattern.matches("^[a-zA-Z가-힣0-9]+$", requestDto.menuName())) {

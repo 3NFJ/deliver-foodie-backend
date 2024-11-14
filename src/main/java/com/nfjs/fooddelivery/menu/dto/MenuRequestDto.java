@@ -6,6 +6,7 @@ import com.nfjs.fooddelivery.menu.enums.MenuStatus;
 import java.util.UUID;
 
 public record MenuRequestDto(
+        UUID shopId,
         String menuName,
         int menuPrice,
         String menuImage,

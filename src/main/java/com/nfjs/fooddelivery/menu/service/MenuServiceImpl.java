@@ -24,9 +24,6 @@ public class MenuServiceImpl implements MenuService {
         menuValidation.addMenuValidation(requestDto, shopId);
 
         Menu entity = menuRepository.save(requestDto.toEntity(shopId));
-        menuValidation.validateMenuDetails(requestDto);
-
-        Menu entity = menuRepository.save(requestDto.toEntity());
 
         return MenuResponseDto.from(entity);
     }
@@ -36,7 +33,7 @@ public class MenuServiceImpl implements MenuService {
     public MenuResponseDto updateMenu(UUID menuId, MenuRequestDto requestDto) {
         Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new NullPointerException("메뉴가 존재하지 않습니다."));
 
-        menuValidation.validateMenuDetails(requestDto);
+        menuValidation.addMenuValidation(requestDto, requestDto.shopId());
 
         menu.update(requestDto);
 
