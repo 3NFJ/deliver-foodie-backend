@@ -23,9 +23,15 @@ public class Order extends BaseEntity {
     private UUID orderId;
 
     @Column(name = "user_id", nullable = false)
+    // @ManyToOne(fetch = FetchType.LAZY)
+    // @JoinColumn(name = "user_id", nullable = false)
+    // UUID Type -> User Type 변경 예정
     private Long userId;
 
     @Column(name = "shop_id", nullable = false)
+    // @ManyToOne(fetch = FetchType.LAZY)
+    // @JoinColumn(name = "shop_id", nullable = false)
+    // UUID Type -> Shop Type 변경 예정
     private UUID shopId;
 
     @Column(name = "order_number", nullable = false, unique = true)
