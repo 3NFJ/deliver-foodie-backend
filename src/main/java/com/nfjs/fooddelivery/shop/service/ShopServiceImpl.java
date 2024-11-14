@@ -82,7 +82,7 @@ public class ShopServiceImpl implements ShopService {
 
     @Override
     public List<ShopResponseDto> getShopList(Pageable pageable) {
-        Page<Shop> shopList = shopRepository.findAll(pageable);
+        Page<Shop> shopList = shopRepository.findAllNonDeletedShops(pageable);
 
         return shopList.stream()
                 .map(ShopResponseDto::from)
