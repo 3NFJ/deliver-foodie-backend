@@ -14,7 +14,7 @@ public record MenuResponseDto(
 
     public static MenuResponseDto from(Menu menu) {
         return new MenuResponseDto(
-                menu.getShopId(),
+                menu.getShop().getShopId(),
                 menu.getMenuName(),
                 menu.getMenuPrice(),
                 menu.getMenuImage(),
