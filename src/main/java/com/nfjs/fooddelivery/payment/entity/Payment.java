@@ -1,5 +1,6 @@
 package com.nfjs.fooddelivery.payment.entity;
 
+import com.nfjs.fooddelivery.common.entity.BaseEntity;
 import com.nfjs.fooddelivery.order.entity.Order;
 import com.nfjs.fooddelivery.payment.enums.CardCompany;
 import jakarta.persistence.*;
@@ -15,7 +16,7 @@ import java.util.UUID;
 @Table(name = "p_payments")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Payment {
+public class Payment extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -26,24 +27,24 @@ public class Payment {
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
-    @Column(name = "card_company", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private CardCompany cardCompany;
-
-    @Column(name = "installment_months")
-    private Integer installmentMonths;
-
     @Column(name = "payment_number", nullable = false)
     private String paymentNumber;
 
-    @Column(name = "total_amount", nullable = false)
-    private Integer totalAmount;
+    @Column(name = "card_company", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private CardCompany cardCompany;
 
     @Column(name = "card_number", nullable = false)
     private String cardNumber;
 
     @Column(name = "is_installment", nullable = false)
     private Boolean isInstallment;
+
+    @Column(name = "installment_months")
+    private Integer installmentMonths;
+
+    @Column(name = "total_amount", nullable = false)
+    private Integer totalAmount;
 
     @Column(name = "request_at", nullable = false)
     private LocalDateTime requestAt;
