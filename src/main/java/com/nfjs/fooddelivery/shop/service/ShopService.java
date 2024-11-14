@@ -11,5 +11,5 @@ public interface ShopService {
 
     ShopResponseDto updateShop(UUID shopId, ShopRequestDto requestDto);
 
-    void deleteShop(UUID shopId, UUID userId);
+    void deleteShop(UUID shopId, Long userId);
 }

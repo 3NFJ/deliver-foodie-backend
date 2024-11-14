@@ -56,11 +56,15 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public void deleteShop(UUID shopId, UUID userId) {
-        Shop entity = shopRepository.findById(shopId).orElseThrow(() -> new NullPointerException("가게 정보를 찾을 수 없습니다."));
+    @Transactional
+    public void deleteShop(UUID shopId, Long userId) {
+        Shop shop = shopRepository.findById(shopId).orElseThrow(() -> new NullPointerException("가게 정보를 찾을 수 없습니다."));
 
-        //userRepository.findById(userId) 검증, 가게주인 여부 일치 검증
+        if (!shop.getUserId().equals(userId)) {
+            throw new ShopException(ErrorCode.USER_NOT_MATCH);
+        }
 
-        entity.delete();
+        //userName 조회
+        shop.delete("user");
     }
 }

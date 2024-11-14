@@ -63,11 +63,8 @@ public class Shop extends BaseEntity {
         this.shopStatus = requestDto.shopStatus();
     }
 
-    public void delete() {
-        // 삭제일,삭제자 컬럼 업데이트
-    }
-
-    public void delete() {
-        // 삭제일,삭제자 컬럼 업데이트
+    public void delete(String deletedBy) {
+        super.delete(deletedBy);
+        this.shopStatus = ShopStatus.CLOSED;
     }
 }
