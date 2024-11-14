@@ -39,7 +39,6 @@ public class Menu extends BaseEntity {
     private MenuStatus status;
 
     public void update(MenuRequestDto requestDto) {
-        shopId = requestDto.shopId();
         menuName = requestDto.menuName();
         menuPrice = requestDto.menuPrice();
         menuImage = requestDto.menuImage();

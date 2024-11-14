@@ -12,6 +12,7 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api")
 public class MenuController {
     private final MenuService menuService;
 
