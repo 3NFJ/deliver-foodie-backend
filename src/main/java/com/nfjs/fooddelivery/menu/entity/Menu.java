@@ -3,6 +3,7 @@ package com.nfjs.fooddelivery.menu.entity;
 import com.nfjs.fooddelivery.common.entity.BaseEntity;
 import com.nfjs.fooddelivery.menu.dto.MenuRequestDto;
 import com.nfjs.fooddelivery.menu.enums.MenuStatus;
+import com.nfjs.fooddelivery.shop.entitiy.Shop;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,9 +21,9 @@ public class Menu extends BaseEntity {
     @Column(name = "menu_id", nullable = false)
     private UUID menuId;
 
-    //todo Shop 엔티티 develop 반영 후 수정 필요
-    @Column(name = "shop_id", nullable = false)
-    private UUID shopId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "shop_id", nullable = false)
+    private Shop shop;
 
     @Column(name = "menu_name", nullable = false)
     private String menuName;

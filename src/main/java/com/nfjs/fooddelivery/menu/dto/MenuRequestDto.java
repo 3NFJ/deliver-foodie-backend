@@ -2,8 +2,7 @@ package com.nfjs.fooddelivery.menu.dto;
 
 import com.nfjs.fooddelivery.menu.entity.Menu;
 import com.nfjs.fooddelivery.menu.enums.MenuStatus;
-
-import java.util.UUID;
+import com.nfjs.fooddelivery.shop.entitiy.Shop;
 
 public record MenuRequestDto(
         UUID shopId,
@@ -13,9 +12,9 @@ public record MenuRequestDto(
         MenuStatus status) {
 
 
-    public Menu toEntity(UUID shopId) {
+    public Menu toEntity(Shop shop) {
         return Menu.builder()
-                .shopId(shopId)
+                .shop(shop)
                 .menuName(menuName)
                 .menuPrice(menuPrice)
                 .menuImage(menuImage)
