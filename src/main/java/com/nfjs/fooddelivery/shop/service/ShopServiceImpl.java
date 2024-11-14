@@ -78,5 +78,4 @@ public class ShopServiceImpl implements ShopService {
                 .map(ShopResponseDto::from)
                 .toList();
     }
-
 }
