@@ -56,9 +56,9 @@ public class Shop extends BaseEntity {
     private ShopStatus shopStatus;
 
 
-    public void update(ShopRequestDto requestDto) {
+    public void update(ShopRequestDto requestDto, Category category) {
         this.shopName = requestDto.name();
-        this.categoryId = requestDto.categoryId();
+        this.category = category;
         this.address = requestDto.address();
         this.phoneNumber = requestDto.phoneNumber();
         this.openingTime = requestDto.openingTime();
