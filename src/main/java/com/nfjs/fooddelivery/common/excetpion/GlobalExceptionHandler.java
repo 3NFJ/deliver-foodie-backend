@@ -22,4 +22,13 @@ public class GlobalExceptionHandler {
 
     return ResponseEntity.status(e.getErrorCode().getStatus()).body(new ErrorResponse(e.getMessage()));
   }
+
+
+    @ExceptionHandler(MenuException.class)
+    public ResponseEntity<ErrorResponse> handleMenuException(MenuException e) {
+
+        return ResponseEntity
+                .status(e.getErrorCode().getStatus())
+                .body(new ErrorResponse(e.getMessage()));
+    }
 }
