@@ -5,6 +5,8 @@ import com.nfjs.fooddelivery.order.dto.OrderCreateRequestDto;
 import com.nfjs.fooddelivery.order.enums.OrderStatus;
 import com.nfjs.fooddelivery.order.enums.PaymentMethod;
 import com.nfjs.fooddelivery.order.enums.PaymentStatus;
+import com.nfjs.fooddelivery.shop.entitiy.Shop;
+import com.nfjs.fooddelivery.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,17 +24,13 @@ public class Order extends BaseEntity {
     @Column(name = "order_id", nullable = false)
     private UUID orderId;
 
-    @Column(name = "user_id", nullable = false)
-    // @ManyToOne(fetch = FetchType.LAZY)
-    // @JoinColumn(name = "user_id", nullable = false)
-    // UUID Type -> User Type 변경 예정
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @Column(name = "shop_id", nullable = false)
-    // @ManyToOne(fetch = FetchType.LAZY)
-    // @JoinColumn(name = "shop_id", nullable = false)
-    // UUID Type -> Shop Type 변경 예정
-    private UUID shopId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "shop_id", nullable = false)
+    private Shop shop;
 
     @Column(name = "order_number", nullable = false, unique = true)
     private String orderNumber;
@@ -73,9 +71,9 @@ public class Order extends BaseEntity {
     @Column(name = "shop_request")
     private String shopRequest;
 
-    public Order(OrderCreateRequestDto orderCreateRequestDto) {
-        this.userId = orderCreateRequestDto.getUserId();
-        this.shopId = orderCreateRequestDto.getShopId();
+    public Order(OrderCreateRequestDto orderCreateRequestDto, User user, Shop shop) {
+        this.user = user;
+        this.shop = shop;
         this.orderNumber = LocalDate.now().toString().replace("-","");
         this.orderStatus = OrderStatus.PENDING;
         this.paymentMethod = orderCreateRequestDto.getPaymentMethod();
