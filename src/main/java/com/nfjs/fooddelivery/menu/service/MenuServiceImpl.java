@@ -11,9 +11,12 @@ import com.nfjs.fooddelivery.shop.repository.ShopRepository;
 import com.nfjs.fooddelivery.user.entity.User;
 import com.nfjs.fooddelivery.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -59,5 +62,15 @@ public class MenuServiceImpl implements MenuService {
         }
 
         menu.delete(user.getUsername());
+    }
+
+    @Override
+    public List<MenuResponseDto> getMenuList(UUID shopId, Pageable pageable) {
+        Shop shop = shopRepository.findById(shopId).orElseThrow();
+        Page<Menu> menus = menuRepository.findAllByShop(shop, pageable);
+
+        return menus.stream()
+                .map(MenuResponseDto::from)
+                .toList();
     }
 }
