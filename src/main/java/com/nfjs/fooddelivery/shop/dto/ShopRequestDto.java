@@ -2,7 +2,6 @@ package com.nfjs.fooddelivery.shop.dto;
 
 import com.nfjs.fooddelivery.shop.entitiy.Shop;
 import com.nfjs.fooddelivery.shop.enums.ShopStatus;
-import lombok.Getter;
 
 import java.time.LocalTime;
 import java.util.UUID;

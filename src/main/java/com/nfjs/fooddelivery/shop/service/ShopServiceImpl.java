@@ -8,8 +8,10 @@ import com.nfjs.fooddelivery.shop.entitiy.Shop;
 import com.nfjs.fooddelivery.shop.repository.ShopRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 @Service
@@ -34,6 +36,21 @@ public class ShopServiceImpl implements ShopService {
         }
 
         Shop entity = shopRepository.save(ShopRequestDto.toEntity(requestDto));
+
+        return ShopResponseDto.from(entity);
+    }
+
+    @Override
+    @Transactional
+    public ShopResponseDto updateShop(UUID shopId, ShopRequestDto requestDto) {
+        Shop entity = shopRepository.findById(shopId).orElseThrow(() -> new NullPointerException("가게 정보를 찾을 수 없습니다."));
+
+        String shopName = requestDto.name();
+        if (!Pattern.matches("^[a-zA-Z가-힣0-9]+$", shopName)) {
+            throw new ShopException(ErrorCode.INVALID_SHOP_NAME);
+        }
+
+        entity.update(requestDto);
 
         return ShopResponseDto.from(entity);
     }
