@@ -42,3 +42,5 @@ out/
 postgres-data/
 *.pid
 pg_wal/
+config/
+init-scripts/
