@@ -1,33 +1,33 @@
 package com.nfjs.fooddelivery.shop.entitiy;
 
+import com.nfjs.fooddelivery.common.entity.BaseEntity;
 import com.nfjs.fooddelivery.shop.dto.ShopRequestDto;
 import com.nfjs.fooddelivery.shop.enums.ShopStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "shops")
+@Table(name = "p_shops", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "shop_name")
+})
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class Shop {
+public class Shop extends BaseEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "shop_id")
     private UUID shopId;
 
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
-    @Column(nullable = false)
-    private String name;
+    @Column(name = "shop_name",nullable = false)
+    private String shopName;
 
     @Column(name = "category_id", nullable = false)
     private UUID categoryId;
@@ -53,7 +53,7 @@ public class Shop {
 
 
     public void update(ShopRequestDto requestDto) {
-        this.name = requestDto.name();
+        this.shopName = requestDto.name();
         this.categoryId = requestDto.categoryId();
         this.address = requestDto.address();
         this.phoneNumber = requestDto.phoneNumber();
@@ -61,10 +61,10 @@ public class Shop {
         this.closingTime = requestDto.closingTime();
         this.minOrderAmount = requestDto.minOrderAmount();
         this.shopStatus = requestDto.shopStatus();
-        //todo 업데이트 시간, 작성자 값 추가
     }
 
-    public void delete() {
-        // 삭제일,삭제자 컬럼 업데이트
+    public void delete(String deletedBy) {
+        super.delete(deletedBy);
+        this.shopStatus = ShopStatus.CLOSED;
     }
 }

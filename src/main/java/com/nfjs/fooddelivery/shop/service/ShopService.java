@@ -3,7 +3,6 @@ package com.nfjs.fooddelivery.shop.service;
 import com.nfjs.fooddelivery.shop.dto.ShopRequestDto;
 import com.nfjs.fooddelivery.shop.dto.ShopResponseDto;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.UUID;
