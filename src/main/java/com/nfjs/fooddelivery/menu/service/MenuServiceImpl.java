@@ -21,6 +21,9 @@ public class MenuServiceImpl implements MenuService {
     public MenuResponseDto addMenu(UUID shopId, MenuRequestDto requestDto) {
         //shop 유효성 검증
 
+        menuValidation.addMenuValidation(requestDto, shopId);
+
+        Menu entity = menuRepository.save(requestDto.toEntity(shopId));
         menuValidation.validateMenuDetails(requestDto);
 
         Menu entity = menuRepository.save(requestDto.toEntity());
