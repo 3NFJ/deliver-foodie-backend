@@ -5,8 +5,11 @@ import com.nfjs.fooddelivery.common.excetpion.ShopException;
 import com.nfjs.fooddelivery.shop.dto.ShopRequestDto;
 import com.nfjs.fooddelivery.shop.dto.ShopResponseDto;
 import com.nfjs.fooddelivery.shop.entitiy.Shop;
+import com.nfjs.fooddelivery.shop.enums.ShopStatus;
 import com.nfjs.fooddelivery.shop.repository.ShopRepository;
+import com.nfjs.fooddelivery.shop.repository.ShopRepositoryCustom;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,8 +21,10 @@ import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ShopServiceImpl implements ShopService {
     private final ShopRepository shopRepository;
+    private final ShopRepositoryCustom shopRepositoryCustom;
 
     @Override
     public ShopResponseDto createShop(ShopRequestDto requestDto) {
@@ -81,8 +86,15 @@ public class ShopServiceImpl implements ShopService {
 
     @Override
     public ShopResponseDto getShopDetail(UUID shopId) {
-        Shop entity = shopRepository.findById(shopId).orElseThrow(() -> new NullPointerException("가게 정보를 찾을 수 없습니다."));
+        Shop shop = shopRepositoryCustom.findValidShopById(shopId).orElseThrow(() -> new NullPointerException("가게 정보를 찾을 수 없습니다."));
 
-        return ShopResponseDto.from(entity);
+        log.info("shop ========{}", shop);
+//        Shop entity = shopRepository.findById(shopId).orElseThrow(() -> new NullPointerException("가게 정보를 찾을 수 없습니다."));
+//
+
+//        if (entity.getDeletedAt() == null && entity.getShopStatus() == ShopStatus.CLOSED) {
+//            return null;
+//        }
+        return ShopResponseDto.from(shop);
     }
 }
