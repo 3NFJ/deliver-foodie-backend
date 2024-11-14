@@ -51,7 +51,7 @@ public class ShopServiceImpl implements ShopService {
     @Override
     @Transactional
     public ShopResponseDto updateShop(UUID shopId, ShopRequestDto requestDto) {
-        Shop entity = shopRepository.findById(shopId).orElseThrow(() -> new NullPointerException("가게 정보를 찾을 수 없습니다."));
+        Shop entity = shopRepository.findById(shopId).orElseThrow(() -> new IllegalStateException(ErrorCode.SHOP_NOT_FOUND.getMessage()));
         Category category = categoryRepository.findById(requestDto.categoryId()).orElseThrow();
 
         String shopName = requestDto.name();
@@ -67,13 +67,14 @@ public class ShopServiceImpl implements ShopService {
     @Override
     @Transactional
     public void deleteShop(UUID shopId, Long userId) {
-        Shop shop = shopRepository.findById(shopId).orElseThrow(() -> new NullPointerException("가게 정보를 찾을 수 없습니다."));
+        Shop shop = shopRepository.findById(shopId).orElseThrow(() -> new IllegalStateException(ErrorCode.SHOP_NOT_FOUND.getMessage()));
 
-        if (!shop.getUserId().equals(userId)) {
+        if (!shop.getUser().getUserId().equals(userId)) {
             throw new ShopException(ErrorCode.USER_NOT_MATCH);
         }
 
-        //userName 조회
-        shop.delete("user");
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalStateException(ErrorCode.USER_NOT_FOUND.getMessage()));
+
+        shop.delete(user.getUsername());
     }
 }
