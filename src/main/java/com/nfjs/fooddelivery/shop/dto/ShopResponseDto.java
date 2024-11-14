@@ -21,9 +21,9 @@ public record ShopResponseDto(
     public static ShopResponseDto from(Shop shop) {
         return new ShopResponseDto(
                 shop.getShopId(),
-                shop.getUserId(),
+                shop.getUser().getUserId(),
                 shop.getShopName(),
-                shop.getCategoryId(),
+                shop.getCategory().getCategoryId(),
                 shop.getAddress(),
                 shop.getPhoneNumber(),
                 shop.getOpeningTime(),

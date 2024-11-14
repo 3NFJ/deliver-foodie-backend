@@ -37,3 +37,10 @@ out/
 .vscode/
 
 .env
+
+### postgres 관련 파일 ###
+postgres-data/
+*.pid
+pg_wal/
+config/
+init-scripts/
