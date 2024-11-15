@@ -2,6 +2,8 @@ package com.nfjs.fooddelivery.order.controller;
 
 import com.nfjs.fooddelivery.order.dto.OrderCreateRequestDto;
 import com.nfjs.fooddelivery.order.dto.OrderCreateResponseDto;
+import com.nfjs.fooddelivery.order.dto.OrderModifyStatusRequestDto;
+import com.nfjs.fooddelivery.order.dto.OrderModifyStatusResponseDto;
 import com.nfjs.fooddelivery.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,12 +22,22 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping("/shops/{shopId}/orders")
-    public ResponseEntity<OrderCreateResponseDto> createShop(
+    public ResponseEntity<OrderCreateResponseDto> createOrder(
             @PathVariable UUID shopId,
             @RequestBody OrderCreateRequestDto orderCreateRequestDto) {
 
         log.info("주문 등록 URL 맵핑 : OK");
         OrderCreateResponseDto responseDto = orderService.createOrder(orderCreateRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
+    }
+
+    @PatchMapping("/orders/{orderId}/status")
+    public ResponseEntity<OrderModifyStatusResponseDto> modifyOrderStatus(
+            @PathVariable UUID orderId,
+            @RequestBody OrderModifyStatusRequestDto orderModifyStatusRequestDto) {
+
+        log.info("주문 상태 수정 URL 맵핑 : OK");
+        OrderModifyStatusResponseDto responseDto = orderService.modifyOrderStatus(orderModifyStatusRequestDto, orderId);
+        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 }
