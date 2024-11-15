@@ -59,4 +59,14 @@ public class OrderController {
         List<OrderGetResponseDto> responseDto = orderService.getOrderList(userDetails);
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
+
+    @GetMapping("/orders/{orderId}")
+    public ResponseEntity<OrderGetDetailResponseDto> getOrderDetail(
+            @PathVariable UUID orderId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        log.info("주문 상세 조회 URL 맵핑 : OK");
+        OrderGetDetailResponseDto responseDto = orderService.getOrderDetail(orderId, userDetails);
+        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+    }
 }

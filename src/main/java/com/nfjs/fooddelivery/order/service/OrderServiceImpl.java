@@ -98,4 +98,22 @@ public class OrderServiceImpl implements OrderService {
         log.info("주문 목록 조회 서비스 호출 : END");
         return orderGetListResponseDto;
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public OrderGetDetailResponseDto getOrderDetail(UUID orderId, UserDetails userDetails) {
+
+        log.info("주문 상세 조회 서비스 호출 : START");
+        User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow();
+        Order order = orderRepository.findById(orderId).orElseThrow();
+
+        log.info("메뉴 담기 : START");
+        List<OrderMenuDto> orderMenuListDto = new ArrayList<>();
+        for(OrderMenu orderMenu: order.getOrderMenus())
+            orderMenuListDto.add(new OrderMenuDto(orderMenu));
+
+        log.info("메뉴 담기 : END");
+        log.info("주문 상세 조회 서비스 호출 : END");
+        return new OrderGetDetailResponseDto(order,orderMenuListDto);
+    }
 }

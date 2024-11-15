@@ -5,12 +5,14 @@ import com.nfjs.fooddelivery.order.dto.OrderCreateRequestDto;
 import com.nfjs.fooddelivery.order.enums.OrderStatus;
 import com.nfjs.fooddelivery.order.enums.PaymentMethod;
 import com.nfjs.fooddelivery.order.enums.PaymentStatus;
+import com.nfjs.fooddelivery.ordermenu.entity.OrderMenu;
 import com.nfjs.fooddelivery.shop.entitiy.Shop;
 import com.nfjs.fooddelivery.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -34,6 +36,9 @@ public class Order extends BaseEntity {
 
     @Column(name = "order_number", nullable = false, unique = true)
     private String orderNumber;
+
+    @OneToMany(mappedBy = "order")
+    private List<OrderMenu> orderMenus;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "order_status", nullable = false)
