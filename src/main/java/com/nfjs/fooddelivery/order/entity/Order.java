@@ -74,7 +74,7 @@ public class Order extends BaseEntity {
     public Order(OrderCreateRequestDto orderCreateRequestDto, User user, Shop shop) {
         this.user = user;
         this.shop = shop;
-        this.orderNumber = LocalDate.now().toString().replace("-","");
+        this.orderNumber = LocalDate.now().toString().replace("-","")+Math.random();
         this.orderStatus = OrderStatus.PENDING;
         this.paymentMethod = orderCreateRequestDto.getPaymentMethod();
         this.paymentStatus = PaymentStatus.REQUESTED;
