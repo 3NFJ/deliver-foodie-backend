@@ -1,9 +1,17 @@
 package com.nfjs.fooddelivery.order.service;
 
+import com.nfjs.fooddelivery.menu.entity.Menu;
+import com.nfjs.fooddelivery.menu.repository.MenuRepository;
 import com.nfjs.fooddelivery.order.dto.OrderCreateRequestDto;
 import com.nfjs.fooddelivery.order.dto.OrderCreateResponseDto;
 import com.nfjs.fooddelivery.order.entity.Order;
 import com.nfjs.fooddelivery.order.repository.OrderRepository;
+import com.nfjs.fooddelivery.ordermenu.entity.OrderMenu;
+import com.nfjs.fooddelivery.ordermenu.repository.OrderMenuRepository;
+import com.nfjs.fooddelivery.shop.entitiy.Shop;
+import com.nfjs.fooddelivery.shop.repository.ShopRepository;
+import com.nfjs.fooddelivery.user.entity.User;
+import com.nfjs.fooddelivery.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,14 +23,32 @@ import org.springframework.transaction.annotation.Transactional;
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
+    private final ShopRepository shopRepository;
+    private final UserRepository userRepository;
+    private final MenuRepository menuRepository;
+    private final OrderMenuRepository orderMenuRepository;
 
     @Override
     @Transactional
     public OrderCreateResponseDto createOrder(OrderCreateRequestDto orderCreateRequestDto) {
 
         log.info("주문 등록 서비스 호출 : START");
-        Order saveOrder = orderRepository.save(new Order(orderCreateRequestDto));
+        User user = userRepository.findById(orderCreateRequestDto.getUserId()).orElseThrow();
+        Shop shop = shopRepository.findById(orderCreateRequestDto.getShopId()).orElseThrow();
+        Order saveOrder = orderRepository.save(new Order(orderCreateRequestDto,user,shop));
+
+        log.info("주문 등록 메뉴 확인 : START");
+        for(OrderCreateRequestDto.MenuDto menuDto : orderCreateRequestDto.getMenuList()) {
+            Menu menu = menuRepository.findById(menuDto.getMenuId()).orElseThrow();
+
+            log.info("메뉴명: {}, 개수: {}, 가격: {}",menuDto.getMenuName(),menuDto.getQuantity(),menuDto.getMenuPrice());
+
+            orderMenuRepository.save(new OrderMenu(saveOrder,menu,
+                    menuDto.getMenuName(),menuDto.getQuantity(),menuDto.getMenuPrice()));
+        }
+        log.info("주문 등록 메뉴 확인 : END");
         log.info("주문 등록 서비스 호출 : END");
+
         return new OrderCreateResponseDto(saveOrder);
     }
 }

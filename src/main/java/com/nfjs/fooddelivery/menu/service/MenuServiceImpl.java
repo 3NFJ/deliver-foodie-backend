@@ -5,6 +5,8 @@ import com.nfjs.fooddelivery.menu.dto.MenuResponseDto;
 import com.nfjs.fooddelivery.menu.entity.Menu;
 import com.nfjs.fooddelivery.menu.repository.MenuRepository;
 import com.nfjs.fooddelivery.menu.validation.MenuValidation;
+import com.nfjs.fooddelivery.shop.entitiy.Shop;
+import com.nfjs.fooddelivery.shop.repository.ShopRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,14 +17,16 @@ import java.util.UUID;
 public class MenuServiceImpl implements MenuService {
     private final MenuRepository menuRepository;
     private final MenuValidation menuValidation;
+    private final ShopRepository shopRepository;
 
     @Override
     public MenuResponseDto addMenu(UUID shopId, MenuRequestDto requestDto) {
         //shop 유효성 검증
+        Shop shop = shopRepository.findById(shopId).orElseThrow();
 
         menuValidation.addMenuValidation(requestDto, shopId);
 
-        Menu entity = menuRepository.save(requestDto.toEntity(shopId));
+        Menu entity = menuRepository.save(requestDto.toEntity(shop));
 
         return MenuResponseDto.from(entity);
     }
