@@ -12,6 +12,7 @@ public enum ErrorCode {
 
   // 회원기능 관련
   USER_NOT_FOUND(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."),
+  UNAUTHORIZED_USER(HttpStatus.UNAUTHORIZED, "인증되지 않은 사용자 입니다"),
 
   // 가게
   INVALID_SHOP_NAME(HttpStatus.BAD_REQUEST, "가게 이름은 한글, 영어, 숫자만 포함 가능합니다."),
