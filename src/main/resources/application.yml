@@ -53,3 +53,7 @@ server:
   error:
     include-message: always
     include-binding-errors: always
+
+ai:
+  url: "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent"
+  key: "AIzaSyBqnFwQyquTwKJ6wNTQeceM2EZ-yD8Gy-c"
