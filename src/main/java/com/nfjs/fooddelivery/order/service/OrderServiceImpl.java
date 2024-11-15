@@ -2,10 +2,7 @@ package com.nfjs.fooddelivery.order.service;
 
 import com.nfjs.fooddelivery.menu.entity.Menu;
 import com.nfjs.fooddelivery.menu.repository.MenuRepository;
-import com.nfjs.fooddelivery.order.dto.OrderCreateRequestDto;
-import com.nfjs.fooddelivery.order.dto.OrderCreateResponseDto;
-import com.nfjs.fooddelivery.order.dto.OrderModifyStatusRequestDto;
-import com.nfjs.fooddelivery.order.dto.OrderModifyStatusResponseDto;
+import com.nfjs.fooddelivery.order.dto.*;
 import com.nfjs.fooddelivery.order.entity.Order;
 import com.nfjs.fooddelivery.order.repository.OrderRepository;
 import com.nfjs.fooddelivery.ordermenu.entity.OrderMenu;
@@ -16,6 +13,7 @@ import com.nfjs.fooddelivery.user.entity.User;
 import com.nfjs.fooddelivery.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,5 +67,16 @@ public class OrderServiceImpl implements OrderService {
 
         log.info("주문 상태 변경 서비스 호출 : END");
         return new OrderModifyStatusResponseDto(user.getUserId(), shop.getShopId(), order.getOrderId(), order.getOrderStatus());
+    }
+
+    @Override
+    public OrderGetStatusResponseDto getOrderStatus(UUID orderId, UserDetails userDetails) {
+
+        log.info("주문 상태 조회 서비스 호출 : START");
+        User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow();
+        Order order = orderRepository.findById(orderId).orElseThrow();
+
+        log.info("주문 상태 변경 서비스 호출 : END");
+        return new OrderGetStatusResponseDto(user.getUserId(), order.getShop().getShopId(), order.getOrderId(), order.getOrderStatus());
     }
 }

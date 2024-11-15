@@ -1,9 +1,7 @@
 package com.nfjs.fooddelivery.order.service;
 
-import com.nfjs.fooddelivery.order.dto.OrderCreateRequestDto;
-import com.nfjs.fooddelivery.order.dto.OrderCreateResponseDto;
-import com.nfjs.fooddelivery.order.dto.OrderModifyStatusRequestDto;
-import com.nfjs.fooddelivery.order.dto.OrderModifyStatusResponseDto;
+import com.nfjs.fooddelivery.order.dto.*;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.UUID;
 
@@ -12,4 +10,6 @@ public interface OrderService {
     OrderCreateResponseDto createOrder(OrderCreateRequestDto orderCreateRequestDto);
 
     OrderModifyStatusResponseDto modifyOrderStatus(OrderModifyStatusRequestDto orderModifyStatusRequestDto, UUID orderId);
+
+    OrderGetStatusResponseDto getOrderStatus(UUID orderId, UserDetails userDetails);
 }
