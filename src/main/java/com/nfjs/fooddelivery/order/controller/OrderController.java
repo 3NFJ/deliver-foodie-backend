@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -47,6 +48,15 @@ public class OrderController {
 
         log.info("주문 상태 조회 URL 맵핑 : OK");
         OrderGetStatusResponseDto responseDto = orderService.getOrderStatus(orderId,userDetails);
+        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+    }
+    
+    @GetMapping("/orders/")
+    public ResponseEntity<List<OrderGetResponseDto>> getOrderList(
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        log.info("주문 목록 조회 URL 맵핑 : OK");
+        List<OrderGetResponseDto> responseDto = orderService.getOrderList(userDetails);
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 }

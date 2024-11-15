@@ -17,6 +17,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -78,5 +80,22 @@ public class OrderServiceImpl implements OrderService {
 
         log.info("주문 상태 변경 서비스 호출 : END");
         return new OrderGetStatusResponseDto(user.getUserId(), order.getShop().getShopId(), order.getOrderId(), order.getOrderStatus());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<OrderGetResponseDto> getOrderList(UserDetails userDetails) {
+
+        log.info("주문 목록 조회 서비스 호출 : START");
+        User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow();
+        List<Order> orders = orderRepository.findAllByUserOrderByCreatedAtDesc(user);
+
+        log.info("주문 목록 담기 : START");
+        List<OrderGetResponseDto> orderGetListResponseDto = new ArrayList<>();
+        for(Order order: orders) orderGetListResponseDto.add(new OrderGetResponseDto(order));
+
+        log.info("주문 목록 담기 : END");
+        log.info("주문 목록 조회 서비스 호출 : END");
+        return orderGetListResponseDto;
     }
 }
