@@ -25,14 +25,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
   private final JwtUtil jwtUtil;
 
   @Override
-  protected boolean shouldNotFilter(HttpServletRequest request) {
-    String path = request.getRequestURI();
-    boolean shouldNotFilter = path.startsWith("/api/auth/");
-    log.debug("URI: {}, Should Not Filter: {}", path, shouldNotFilter);
-    return shouldNotFilter;
-  }
-
-  @Override
   protected void doFilterInternal(
       HttpServletRequest req,
       HttpServletResponse res,
@@ -40,19 +32,21 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
   ) throws ServletException, IOException {
 
     log.debug("=== JwtAuthorizationFilter starting ===");
-    log.debug("Request URI: {}", req.getRequestURI());
-    log.debug("Request Method: {}", req.getMethod());
-
     String tokenValue = jwtUtil.getJwtFromHeader(req);
 
     if (StringUtils.hasText(tokenValue)) {
+      Claims info = jwtUtil.getUserInfoFromToken(tokenValue);
+      UserDetailsImpl userDetails = (UserDetailsImpl) userDetailsService.loadUserByUsername(info.getSubject());
+
+      if (!userDetails.getUser().isValidTokenCreatedAt()) {
+        log.error("Logged out token");
+        return;
+      }
 
       if (!jwtUtil.validateToken(tokenValue)) {
         log.error("Token Error");
         return;
       }
-
-      Claims info = jwtUtil.getUserInfoFromToken(tokenValue);
 
       try {
         setAuthentication(info.getSubject());
@@ -64,6 +58,15 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     filterChain.doFilter(req, res);
     log.debug("=== JwtAuthorizationFilter completed ===");
+  }
+
+  private boolean validateAndGetUser(String token) {
+    if (!jwtUtil.validateToken(token)) {
+      return false;
+    }
+    Claims info = jwtUtil.getUserInfoFromToken(token);
+    setAuthentication(info.getSubject());
+    return true;
   }
 
   // 인증 처리
