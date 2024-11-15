@@ -1,6 +1,7 @@
 package com.nfjs.fooddelivery.ai.service;
 
 import com.nfjs.fooddelivery.ai.dto.AIRequestDto;
+import com.nfjs.fooddelivery.ai.dto.GeminiRequestDto;
 import com.nfjs.fooddelivery.ai.dto.AIResponseDto;
 import com.nfjs.fooddelivery.ai.entity.AI;
 import com.nfjs.fooddelivery.ai.repository.AIRepository;
@@ -33,26 +34,26 @@ public class AIService {
 
 
     @Transactional
-    public AIResponseDto askQuestion(AIRequestDto requestDto, Long userId) {
-        User user = userRepository.findById(userId).orElseThrow();
+    public AIResponseDto askQuestion(AIRequestDto requestDto) {
+        User user = userRepository.findById(requestDto.getUserId()).orElseThrow();
+        String question = requestDto.getQuestion();
 
-        AIResponseDto body = callApi(requestDto);
+        AIResponseDto body = callApi(GeminiRequestDto.convert(question));
 
         String answer = body.getCandidates().get(0).getContent().getParts().get(0).getText();
-        String question = requestDto.getContents().get(0).getParts().get(0).getText();
 
         aiRepository.save(AI.toEntity(answer, question, user));
 
         return body;
     }
 
-    private AIResponseDto callApi(AIRequestDto requestDto) {
+    private AIResponseDto callApi(GeminiRequestDto requestDto) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         String urlWithKey = url + "?key=" + key;
 
-        HttpEntity<AIRequestDto> request = new HttpEntity<>(requestDto, headers);
+        HttpEntity<GeminiRequestDto> request = new HttpEntity<>(requestDto, headers);
 
         return restTemplate.exchange(
                 urlWithKey,
