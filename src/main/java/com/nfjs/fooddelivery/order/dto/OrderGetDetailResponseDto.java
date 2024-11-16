@@ -5,6 +5,8 @@ import com.nfjs.fooddelivery.order.enums.OrderStatus;
 import com.nfjs.fooddelivery.order.enums.PaymentMethod;
 import com.nfjs.fooddelivery.order.enums.PaymentStatus;
 import lombok.Getter;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,6 +29,7 @@ public class OrderGetDetailResponseDto {
     private String deliveryRequest;
     private String shopRequest;
     private List<OrderMenuDto> menuList;
+    private LocalDateTime orderCreatedAt;
 
     public OrderGetDetailResponseDto(Order order, List<OrderMenuDto> orderMenuListDto) {
         this.orderId = order.getOrderId();
@@ -45,5 +48,6 @@ public class OrderGetDetailResponseDto {
         this.deliveryRequest = order.getDeliveryRequest();
         this.shopRequest = order.getShopRequest();
         this.menuList = orderMenuListDto;
+        this.orderCreatedAt = order.getCreatedAt();
     }
 }
