@@ -55,7 +55,7 @@ public class MenuValidation {
             throw new MenuException(INVALID_MENU_PRICE);
         }
 
-        if (user.getUserId().equals(shop.getUser().getUserId())) {
+        if (!user.getUserId().equals(shop.getUser().getUserId())) {
             throw new MenuException(STORE_OWNER_MISMATCH);
         }
     }
