@@ -25,17 +25,17 @@ public class MenuValidation {
 
     public void addMenuValidation(MenuAddRequestDto requestDto, UUID shopId) {
         if (!Pattern.matches("^[a-zA-Z가-힣0-9]+$", requestDto.menuName())) {
-            throw new MenuException(ErrorCode.INVALID_MENU_NAME);
+            throw new MenuException(INVALID_MENU_NAME);
         }
 
         Shop shop = shopRepository.findById(shopId).orElseThrow();
 
         if (menuRepository.existsByShopAndMenuNameEquals(shop, requestDto.menuName())) {
-            throw new MenuException(ErrorCode.DUPLICATE_MENU_NAME);
+            throw new MenuException(DUPLICATE_MENU_NAME);
         }
 
         if (requestDto.menuPrice() < 0) {
-            throw new MenuException(ErrorCode.INVALID_MENU_PRICE);
+            throw new MenuException(INVALID_MENU_PRICE);
         }
 
     }

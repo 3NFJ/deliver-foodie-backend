@@ -1,5 +1,6 @@
 package com.nfjs.fooddelivery.menu.service;
 
+import com.nfjs.fooddelivery.common.excetpion.MenuException;
 import com.nfjs.fooddelivery.menu.dto.MenuAddRequestDto;
 import com.nfjs.fooddelivery.menu.dto.MenuResponseDto;
 import com.nfjs.fooddelivery.menu.dto.MenuUpdateRequestDto;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
+import static com.nfjs.fooddelivery.common.excetpion.ErrorCode.MENU_NOT_FOUNT;
 import static com.nfjs.fooddelivery.common.excetpion.ErrorCode.USER_NOT_FOUND;
 
 @Service
@@ -42,8 +44,8 @@ public class MenuServiceImpl implements MenuService {
     @Override
     @Transactional
     public MenuResponseDto updateMenu(UUID menuId, MenuUpdateRequestDto requestDto) {
-        Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new NullPointerException("메뉴가 존재하지 않습니다."));
-        User user = userRepository.findById(requestDto.userId()).orElseThrow(() -> new IllegalStateException(USER_NOT_FOUND.getMessage()));
+        Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new MenuException(MENU_NOT_FOUNT));
+        User user = userRepository.findById(requestDto.userId()).orElseThrow(() -> new MenuException(USER_NOT_FOUND));
 
         menuValidation.updateValidation(requestDto, user);
 
