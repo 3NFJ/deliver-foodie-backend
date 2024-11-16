@@ -15,6 +15,7 @@ import java.util.Date;
 import javax.crypto.SecretKey;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -91,15 +92,18 @@ public class JwtUtil {
       return true;
 
     } catch (SecurityException | MalformedJwtException e) {
-      log.error("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.");
+      log.error("Invalid JWT signature");
+      throw new AuthenticationException("유효하지 않은 토큰입니다.") {};
     } catch (ExpiredJwtException e) {
-      log.error("Expired JWT token, 만료된 JWT token 입니다.");
+      log.error("Expired JWT token");
+      throw new AuthenticationException("만료된 토큰입니다.") {};
     } catch (UnsupportedJwtException e) {
-      log.error("Unsupported JWT token, 지원되지 않는 JWT 토큰 입니다.");
+      log.error("Unsupported JWT token");
+      throw new AuthenticationException("지원되지 않는 토큰입니다.") {};
     } catch (IllegalArgumentException e) {
-      log.error("JWT claims is empty, 잘못된 JWT 토큰 입니다.");
+      log.error("JWT claims is empty");
+      throw new AuthenticationException("잘못된 JWT 토큰 입니다.") {};
     }
-    return false;
   }
 
   // 토큰에서 사용자 정보 가져오기
