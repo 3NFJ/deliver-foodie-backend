@@ -2,10 +2,8 @@ package com.nfjs.fooddelivery.menu.service;
 
 import com.nfjs.fooddelivery.menu.dto.MenuAddRequestDto;
 import com.nfjs.fooddelivery.menu.dto.MenuResponseDto;
-import com.nfjs.fooddelivery.menu.entity.Menu;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import com.nfjs.fooddelivery.menu.dto.MenuUpdateRequestDto;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.UUID;

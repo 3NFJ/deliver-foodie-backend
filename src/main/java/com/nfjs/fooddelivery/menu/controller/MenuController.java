@@ -3,11 +3,8 @@ package com.nfjs.fooddelivery.menu.controller;
 import com.nfjs.fooddelivery.menu.dto.MenuAddRequestDto;
 import com.nfjs.fooddelivery.menu.dto.MenuResponseDto;
 import com.nfjs.fooddelivery.menu.dto.MenuUpdateRequestDto;
-import com.nfjs.fooddelivery.menu.entity.Menu;
 import com.nfjs.fooddelivery.menu.service.MenuService;
-import com.nfjs.fooddelivery.shop.dto.ShopResponseDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -47,7 +44,7 @@ public class MenuController {
 
     @GetMapping("/shops/{shopId}/menus")
     public ResponseEntity<List<MenuResponseDto>> getMenuList(@PathVariable UUID shopId,
-                                                       @PageableDefault(page = 0, size = 10, sort = "menuId", direction = Sort.Direction.DESC)
+                                                       @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Sort.Direction.DESC)
                                                        Pageable pageable) {
 
         List<MenuResponseDto> menuList = menuService.getMenuList(shopId, pageable);

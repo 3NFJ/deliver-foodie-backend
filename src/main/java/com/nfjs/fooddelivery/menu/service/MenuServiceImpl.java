@@ -21,8 +21,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.nfjs.fooddelivery.common.excetpion.ErrorCode.*;
-import static com.nfjs.fooddelivery.common.excetpion.ErrorCode.MENU_NOT_FOUND;
-import static com.nfjs.fooddelivery.common.excetpion.ErrorCode.USER_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -73,6 +71,7 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public List<MenuResponseDto> getMenuList(UUID shopId, Pageable pageable) {
+        //todo shop 브랜치 병합 시 예외 처리
         Shop shop = shopRepository.findById(shopId).orElseThrow();
         Page<Menu> menus = menuRepository.findAllByShop(shop, pageable);
 
