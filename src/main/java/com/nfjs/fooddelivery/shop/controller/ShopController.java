@@ -33,7 +33,7 @@ public class ShopController {
     }
 
     @PatchMapping("/shops/{shopId}")
-    public ResponseEntity<Object> deleteShop(@PathVariable UUID shopId, @RequestParam Long userId) {
+    public ResponseEntity<Void> deleteShop(@PathVariable UUID shopId, @RequestParam Long userId) {
         shopService.deleteShop(shopId, userId);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
