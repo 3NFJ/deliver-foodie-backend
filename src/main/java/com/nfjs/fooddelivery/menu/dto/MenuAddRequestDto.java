@@ -4,10 +4,7 @@ import com.nfjs.fooddelivery.menu.entity.Menu;
 import com.nfjs.fooddelivery.menu.enums.MenuStatus;
 import com.nfjs.fooddelivery.shop.entitiy.Shop;
 
-import java.util.UUID;
-
-public record MenuRequestDto(
-        UUID shopId,
+public record MenuAddRequestDto(
         String menuName,
         int menuPrice,
         String menuImage,
