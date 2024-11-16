@@ -17,7 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
-import static com.nfjs.fooddelivery.common.excetpion.ErrorCode.MENU_NOT_FOUNT;
+import static com.nfjs.fooddelivery.common.excetpion.ErrorCode.*;
+import static com.nfjs.fooddelivery.common.excetpion.ErrorCode.MENU_NOT_FOUND;
 import static com.nfjs.fooddelivery.common.excetpion.ErrorCode.USER_NOT_FOUND;
 
 @Service
@@ -44,7 +45,7 @@ public class MenuServiceImpl implements MenuService {
     @Override
     @Transactional
     public MenuResponseDto updateMenu(UUID menuId, MenuUpdateRequestDto requestDto) {
-        Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new MenuException(MENU_NOT_FOUNT));
+        Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new MenuException(MENU_NOT_FOUND));
         User user = userRepository.findById(requestDto.userId()).orElseThrow(() -> new MenuException(USER_NOT_FOUND));
 
         menuValidation.updateValidation(requestDto, user);
@@ -57,11 +58,11 @@ public class MenuServiceImpl implements MenuService {
     @Override
     @Transactional
     public void deleteMenu(UUID menuId, Long userId) {
-        Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new NullPointerException(ErrorCode.MENU_NOT_FOUND.getMessage()));
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalStateException(ErrorCode.USER_NOT_FOUND.getMessage()));
+        Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new MenuException(MENU_NOT_FOUND));
+        User user = userRepository.findById(userId).orElseThrow(() -> new MenuException(USER_NOT_FOUND));
 
         if (!menu.getShop().getUser().getUserId().equals(userId)) {
-            throw new IllegalStateException("유저 불일치");
+            throw new MenuException(SHOP_OWNER_MISMATCH);
         }
 
         menu.delete(user.getUsername());

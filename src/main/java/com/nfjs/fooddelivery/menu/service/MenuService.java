@@ -11,4 +11,6 @@ public interface MenuService {
     MenuResponseDto addMenu(UUID shopId, MenuAddRequestDto requestDto);
 
     MenuResponseDto updateMenu(UUID menuId, MenuUpdateRequestDto requestDto);
+    
+    void deleteMenu(UUID menuId, Long userId);
 }

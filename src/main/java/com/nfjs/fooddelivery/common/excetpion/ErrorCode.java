@@ -21,8 +21,8 @@ public enum ErrorCode {
   // 메뉴
   INVALID_MENU_NAME(HttpStatus.BAD_REQUEST, "메뉴 이름은 한글, 영어, 숫자만 포함 가능합니다."),
   DUPLICATE_MENU_NAME(HttpStatus.CONFLICT, "가게에 이미 존재하는 메뉴명 입니다."),
-  STORE_OWNER_MISMATCH(HttpStatus.CONFLICT, "해당 메뉴 가게의 유저가 일치하지 않습니다."),
-  MENU_NOT_FOUNT(HttpStatus.NOT_FOUND, "메뉴를 찾을 수 없습니다."),
+  SHOP_OWNER_MISMATCH(HttpStatus.CONFLICT, "해당 메뉴 가게의 유저가 일치하지 않습니다."),
+  MENU_NOT_FOUND(HttpStatus.NOT_FOUND, "메뉴를 찾을 수 없습니다."),
   INVALID_MENU_PRICE(HttpStatus.BAD_REQUEST, "유효하지 않은 메뉴 가격입니다.");
 
   private final HttpStatus status;

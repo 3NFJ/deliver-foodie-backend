@@ -1,10 +1,8 @@
 package com.nfjs.fooddelivery.menu.validation;
 
-import com.nfjs.fooddelivery.common.excetpion.ErrorCode;
 import com.nfjs.fooddelivery.common.excetpion.MenuException;
 import com.nfjs.fooddelivery.menu.dto.MenuAddRequestDto;
 import com.nfjs.fooddelivery.menu.dto.MenuUpdateRequestDto;
-import com.nfjs.fooddelivery.menu.entity.Menu;
 import com.nfjs.fooddelivery.menu.repository.MenuRepository;
 import com.nfjs.fooddelivery.shop.entitiy.Shop;
 import com.nfjs.fooddelivery.shop.repository.ShopRepository;
@@ -56,7 +54,7 @@ public class MenuValidation {
         }
 
         if (!user.getUserId().equals(shop.getUser().getUserId())) {
-            throw new MenuException(STORE_OWNER_MISMATCH);
+            throw new MenuException(SHOP_OWNER_MISMATCH);
         }
     }
 }
