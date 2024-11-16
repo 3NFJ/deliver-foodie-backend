@@ -1,8 +1,9 @@
 package com.nfjs.fooddelivery.menu.service;
 
-import com.nfjs.fooddelivery.common.excetpion.ErrorCode;
-import com.nfjs.fooddelivery.menu.dto.MenuRequestDto;
+import com.nfjs.fooddelivery.common.excetpion.MenuException;
+import com.nfjs.fooddelivery.menu.dto.MenuAddRequestDto;
 import com.nfjs.fooddelivery.menu.dto.MenuResponseDto;
+import com.nfjs.fooddelivery.menu.dto.MenuUpdateRequestDto;
 import com.nfjs.fooddelivery.menu.entity.Menu;
 import com.nfjs.fooddelivery.menu.repository.MenuRepository;
 import com.nfjs.fooddelivery.menu.validation.MenuValidation;
@@ -19,6 +20,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.UUID;
 
+import static com.nfjs.fooddelivery.common.excetpion.ErrorCode.*;
+import static com.nfjs.fooddelivery.common.excetpion.ErrorCode.MENU_NOT_FOUND;
+import static com.nfjs.fooddelivery.common.excetpion.ErrorCode.USER_NOT_FOUND;
+
 @Service
 @RequiredArgsConstructor
 public class MenuServiceImpl implements MenuService {
@@ -27,8 +32,9 @@ public class MenuServiceImpl implements MenuService {
     private final ShopRepository shopRepository;
     private final UserRepository userRepository;
 
+
     @Override
-    public MenuResponseDto addMenu(UUID shopId, MenuRequestDto requestDto) {
+    public MenuResponseDto addMenu(UUID shopId, MenuAddRequestDto requestDto) {
         //shop 유효성 검증
         Shop shop = shopRepository.findById(shopId).orElseThrow();
 
@@ -41,10 +47,11 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     @Transactional
-    public MenuResponseDto updateMenu(UUID menuId, MenuRequestDto requestDto) {
-        Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new NullPointerException("메뉴가 존재하지 않습니다."));
+    public MenuResponseDto updateMenu(UUID menuId, MenuUpdateRequestDto requestDto) {
+        Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new MenuException(MENU_NOT_FOUND));
+        User user = userRepository.findById(requestDto.userId()).orElseThrow(() -> new MenuException(USER_NOT_FOUND));
 
-        menuValidation.addMenuValidation(requestDto, requestDto.shopId());
+        menuValidation.updateValidation(requestDto, user);
 
         menu.update(requestDto);
 
@@ -54,11 +61,11 @@ public class MenuServiceImpl implements MenuService {
     @Override
     @Transactional
     public void deleteMenu(UUID menuId, Long userId) {
-        Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new NullPointerException(ErrorCode.MENU_NOT_FOUND.getMessage()));
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalStateException(ErrorCode.USER_NOT_FOUND.getMessage()));
+        Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new MenuException(MENU_NOT_FOUND));
+        User user = userRepository.findById(userId).orElseThrow(() -> new MenuException(USER_NOT_FOUND));
 
         if (!menu.getShop().getUser().getUserId().equals(userId)) {
-            throw new IllegalStateException("유저 불일치");
+            throw new MenuException(SHOP_OWNER_MISMATCH);
         }
 
         menu.delete(user.getUsername());
