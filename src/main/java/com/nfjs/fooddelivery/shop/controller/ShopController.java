@@ -44,7 +44,7 @@ public class ShopController {
     }
 
     @GetMapping("/shops")
-    public ResponseEntity<List<ShopResponseDto>> getShopList(@PageableDefault(page = 0, size = 10, sort = "shopId", direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity<List<ShopResponseDto>> getShopList(@PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         List<ShopResponseDto> shopList = shopService.getShopList(pageable);
 
         return ResponseEntity.status(HttpStatus.OK).body(shopList);
