@@ -11,6 +11,8 @@ import com.nfjs.fooddelivery.shop.repository.ShopRepository;
 import com.nfjs.fooddelivery.user.entity.User;
 import com.nfjs.fooddelivery.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -76,5 +78,14 @@ public class ShopServiceImpl implements ShopService {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalStateException(ErrorCode.USER_NOT_FOUND.getMessage()));
 
         shop.delete(user.getUsername());
+    }
+
+    @Override
+    public List<ShopResponseDto> getShopList(Pageable pageable) {
+        Page<Shop> shopList = shopRepository.findAllNonDeletedShops(pageable);
+
+        return shopList.stream()
+                .map(ShopResponseDto::from)
+                .toList();
     }
 }
