@@ -71,6 +71,10 @@ public class Order extends BaseEntity {
     @Column(name = "shop_request")
     private String shopRequest;
 
+    public void modifyStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
     public Order(OrderCreateRequestDto orderCreateRequestDto, User user, Shop shop) {
         this.user = user;
         this.shop = shop;
