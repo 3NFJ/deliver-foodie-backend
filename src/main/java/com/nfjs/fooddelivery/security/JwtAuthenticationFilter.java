@@ -12,6 +12,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -54,20 +55,22 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
   protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
       FilterChain chain, Authentication authResult)
       throws IOException {
-    String username = ((UserDetailsImpl) authResult.getPrincipal()).getUsername();
-    UserRoleEnum role = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getRole();
-    User user = ((UserDetailsImpl) authResult.getPrincipal()).getUser();
+    UserDetailsImpl userDetails = (UserDetailsImpl) authResult.getPrincipal();
+    User user = userDetails.getUser();
+    UserRoleEnum role = user.getRole();
+    UUID userNumber = user.getUserNumber();
 
     authService.updateTokenCreatedAt(user); // 인증 성공 후 토큰 업데이트
 
-    String accessToken = jwtUtil.createAccessToken(username, role);
-    String refreshToken = jwtUtil.createRefreshToken(username, role);
+    String accessToken = jwtUtil.createAccessToken(userNumber, role);
+    String refreshToken = jwtUtil.createRefreshToken(userNumber, role);
 
     response.addHeader(JwtUtil.AUTHORIZATION_HEADER, accessToken);
 
     SigninResponseDto signinResponseDto = SigninResponseDto.builder()
         .accessToken(accessToken)
         .refreshToken(refreshToken)
+        .userNumber(userNumber)
         .role(role)
         .build();
 

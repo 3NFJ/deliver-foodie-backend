@@ -7,6 +7,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -39,13 +40,15 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
       try {
         jwtUtil.validateToken(tokenValue); // 토큰 유효성 검사
         Claims info = jwtUtil.getUserInfoFromToken(tokenValue); // 사용자 정보 추출
-        UserDetailsImpl userDetails = (UserDetailsImpl) userDetailsService.loadUserByUsername(info.getSubject());
+        UUID userNumber = UUID.fromString(info.getSubject());
+
+        UserDetailsImpl userDetails = (UserDetailsImpl) userDetailsService.loadUserByUserNumber(userNumber);
 
         if (!userDetails.getUser().isValidTokenCreatedAt()) {
           throw new AuthenticationException("로그아웃된 토큰입니다.") {};
         }
 
-        setAuthentication(info.getSubject()); // 인증정보 설정
+        setAuthentication(userDetails.getUsername());
 
       } catch (AuthenticationException e) {
         throw e;
@@ -53,15 +56,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     }
     filterChain.doFilter(req, res);
     log.debug("=== JwtAuthorizationFilter completed ===");
-  }
-
-  private boolean validateAndGetUser(String token) {
-    if (!jwtUtil.validateToken(token)) {
-      return false;
-    }
-    Claims info = jwtUtil.getUserInfoFromToken(token);
-    setAuthentication(info.getSubject());
-    return true;
   }
 
   /**
