@@ -66,4 +66,9 @@ public class Shop extends BaseEntity {
         this.minOrderAmount = requestDto.minOrderAmount();
         this.shopStatus = requestDto.shopStatus();
     }
+
+    public void delete(String deletedBy) {
+        super.delete(deletedBy);
+        this.shopStatus = ShopStatus.CLOSED;
+    }
 }
