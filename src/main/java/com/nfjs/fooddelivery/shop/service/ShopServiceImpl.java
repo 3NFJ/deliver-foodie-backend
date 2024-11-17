@@ -11,6 +11,7 @@ import com.nfjs.fooddelivery.shop.repository.ShopRepository;
 import com.nfjs.fooddelivery.user.entity.User;
 import com.nfjs.fooddelivery.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ShopServiceImpl implements ShopService {
     private final ShopRepository shopRepository;
     private final UserRepository userRepository;
@@ -87,5 +89,12 @@ public class ShopServiceImpl implements ShopService {
         return shopList.stream()
                 .map(ShopResponseDto::from)
                 .toList();
+    }
+
+    @Override
+    public ShopResponseDto getShopDetail(UUID shopId) {
+        Shop shop = shopRepository.findByShopIdAndDeletedAtIsNull(shopId).orElseThrow(() -> new IllegalStateException(ErrorCode.SHOP_NOT_FOUND.getMessage()));
+
+        return ShopResponseDto.from(shop);
     }
 }

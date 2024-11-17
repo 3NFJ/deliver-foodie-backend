@@ -16,4 +16,6 @@ public interface ShopService {
     void deleteShop(UUID shopId, Long userId);
 
     List<ShopResponseDto> getShopList(Pageable pageable);
+
+    ShopResponseDto getShopDetail(UUID shopId);
 }
