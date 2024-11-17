@@ -1,16 +1,12 @@
 package com.nfjs.fooddelivery.user.entity;
 
 import com.nfjs.fooddelivery.common.entity.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
+import com.nfjs.fooddelivery.deliveryaddress.entity.DeliveryAddress;
+import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -52,6 +48,9 @@ public class User extends BaseEntity {
 
   @Column(name = "token_created_at")
   private LocalDateTime tokenCreatedAt;
+
+  @OneToMany(mappedBy = "user")
+  private List<DeliveryAddress> deliveryAddressList = new ArrayList<>();
 
   @PrePersist
   public void generateUserNumber() {
