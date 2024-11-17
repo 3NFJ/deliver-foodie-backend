@@ -12,6 +12,7 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api")
 public class ShopController {
 
     private final ShopService shopService;
@@ -29,5 +30,12 @@ public class ShopController {
         ShopResponseDto responseDto = shopService.updateShop(shopId, requestDto);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
+    }
+
+    @PatchMapping("/shops/{shopId}")
+    public ResponseEntity<Void> deleteShop(@PathVariable UUID shopId, @RequestParam Long userId) {
+        shopService.deleteShop(shopId, userId);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
