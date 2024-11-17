@@ -37,22 +37,17 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     String tokenValue = jwtUtil.getJwtFromHeader(req); // 토큰 추출
 
     if (StringUtils.hasText(tokenValue)) {
-      try {
-        jwtUtil.validateToken(tokenValue); // 토큰 유효성 검사
-        Claims info = jwtUtil.getUserInfoFromToken(tokenValue); // 사용자 정보 추출
-        UUID userNumber = UUID.fromString(info.getSubject());
+      jwtUtil.validateToken(tokenValue); // 토큰 유효성 검사
+      Claims info = jwtUtil.getUserInfoFromToken(tokenValue); // 사용자 정보 추출
+      UUID userNumber = UUID.fromString(info.getSubject());
 
-        UserDetailsImpl userDetails = (UserDetailsImpl) userDetailsService.loadUserByUserNumber(userNumber);
+      UserDetailsImpl userDetails = (UserDetailsImpl) userDetailsService.loadUserByUserNumber(userNumber);
 
-        if (!userDetails.getUser().isValidTokenCreatedAt()) {
-          throw new AuthenticationException("로그아웃된 토큰입니다.") {};
-        }
-
-        setAuthentication(userDetails.getUsername());
-
-      } catch (AuthenticationException e) {
-        throw e;
+      if (!userDetails.getUser().isValidTokenCreatedAt()) {
+        throw new AuthenticationException("로그아웃된 토큰입니다.") {};
       }
+
+      setAuthentication(userDetails.getUsername());
     }
     filterChain.doFilter(req, res);
     log.debug("=== JwtAuthorizationFilter completed ===");
