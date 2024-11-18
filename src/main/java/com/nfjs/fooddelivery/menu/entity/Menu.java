@@ -1,6 +1,8 @@
 package com.nfjs.fooddelivery.menu.entity;
 
 import com.nfjs.fooddelivery.common.entity.BaseEntity;
+import com.nfjs.fooddelivery.menu.dto.MenuAddRequestDto;
+import com.nfjs.fooddelivery.menu.dto.MenuUpdateRequestDto;
 import com.nfjs.fooddelivery.menu.enums.MenuStatus;
 import com.nfjs.fooddelivery.shop.entitiy.Shop;
 import jakarta.persistence.*;
@@ -36,4 +38,11 @@ public class Menu extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private MenuStatus status;
+
+    public void update(MenuUpdateRequestDto requestDto) {
+        menuName = requestDto.menuName();
+        menuPrice = requestDto.menuPrice();
+        menuImage = requestDto.menuImage();
+        status = requestDto.status();
+    }
 }
