@@ -10,7 +10,6 @@ import com.nfjs.fooddelivery.menu.validation.MenuValidation;
 import com.nfjs.fooddelivery.shop.entitiy.Shop;
 import com.nfjs.fooddelivery.shop.repository.ShopRepository;
 import com.nfjs.fooddelivery.user.entity.User;
-import com.nfjs.fooddelivery.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
-import static com.nfjs.fooddelivery.common.excetpion.ErrorCode.MENU_NOT_FOUNT;
 import static com.nfjs.fooddelivery.common.excetpion.ErrorCode.*;
 
 @Service
@@ -45,7 +43,7 @@ public class MenuServiceImpl implements MenuService {
     @Override
     @Transactional
     public MenuResponseDto updateMenu(UUID menuId, MenuUpdateRequestDto requestDto, User user) {
-        Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new MenuException(MENU_NOT_FOUNT));
+        Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new MenuException(MENU_NOT_FOUND));
 
         menuValidation.updateValidation(requestDto, user);
 
@@ -56,11 +54,10 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     @Transactional
-    public void deleteMenu(UUID menuId, Long userId) {
+    public void deleteMenu(UUID menuId, User user) {
         Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new MenuException(MENU_NOT_FOUND));
-        User user = userRepository.findById(userId).orElseThrow(() -> new MenuException(USER_NOT_FOUND));
 
-        if (!menu.getShop().getUser().getUserId().equals(userId)) {
+        if (!menu.getShop().getUser().getUserId().equals(user.getUserId())) {
             throw new MenuException(SHOP_OWNER_MISMATCH);
         }
 
