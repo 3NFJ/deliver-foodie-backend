@@ -118,4 +118,21 @@ public class OrderServiceImpl implements OrderService {
         log.info("주문 상세 조회 서비스 호출 : END");
         return new OrderGetDetailResponseDto(order,orderMenuListDto);
     }
+
+    @Override
+    public List<OrderGetShopResponseDto> getOrderShopList(UUID shopId, UserDetails userDetails) {
+
+        log.info("매장별 주문 목록 조회 서비스 호출 : START");
+        User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow();
+        Shop shop = shopRepository.findById(shopId).orElseThrow();
+        List<Order> orders = orderRepository.findAllByShopOrderByCreatedAtDesc(shop);
+
+        log.info("메뉴 담기 : START");
+        List<OrderGetShopResponseDto> orderGetShopListResponseDto = new ArrayList<>();
+        for(Order order: orders) orderGetShopListResponseDto.add(new OrderGetShopResponseDto(order,shop));
+
+        log.info("메뉴 담기 : END");
+        log.info("주문 상세 조회 서비스 호출 : END");
+        return orderGetShopListResponseDto;
+    }
 }
