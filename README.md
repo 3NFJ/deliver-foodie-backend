@@ -18,21 +18,43 @@
 
 ### 주요 기능
 1. **회원 관리**
-   - 역할 기반 권한 관리 (고객/사장님/관리자)
-   - JWT 기반 인증/인가
-
-2. **가게 관리**
-   - 메뉴 등록/수정 (이미지 업로드)
+- 회원가입 기능
+    - 사용자는 회원가입 후 사용할 수 있다.
+    - 회원가입시 닉네임, 이메일은 중복될 수 없다.
+- 로그인, 로그아웃 기능
+    - 로그인한 경우에만 사용할 수 있다.
+    - 로그인은 JWT 기반으로 제공한다.
+- 모든 기능은 역할 기반으로 권한이 부여된다. (고객/사장님/관리자)
+  
+2. **음식점 관리**
+   - 관리자 권한의 사용자만 음식점 등록하고 관리할 수 있다.
+   - 관리자는 음식점 정보를 등록하고, 수정 및 삭제할 수 있다.
+   - 모든 사용자는 음식점 목록을 조회할 수 있다.
 
 3. **메뉴 관리**
-
+  - 사장님 권한의 사용자는 가게의 메뉴를 등록할 수 있다.
+  - 메뉴 삭제 및 메뉴 숨기기 기능을 제공한다.
+  - 모든 사용자는 가게별 메뉴를 조회할 수 있다.
    
 4. **주문 관리**
-   - 실시간 주문 상태 확인
+   - 고객은 주문
+   - 고객은 실시간 주문 상태를 확인할 수 있다.
+   - 주문 확인 중인 주문은 취소할 수 없다.
 
-5. **AI 기반 사장님 설명 등록**
-   - Gemini AI 활용 가게 정보 추천
-   - 자동 응답 시스템
+6. **리뷰 관리**
+   - 고객 권한의 사용자는 리뷰를 등록할 수 있다.
+   - 리뷰 등록/수정 (이미지 업로드)
+
+8. **AI 기반 사장님 메뉴 설명 등록**
+   - 사장님은 Gemini AI를 활용해 메뉴 설명을 제공받을 수 있다.
+   - 제공 받은 메뉴 설명은 모아보기 기능을 통해 목록으로 제공한다.
+
+9. **카테고리 기능**
+    - 관리자 권한의 사용자는 카테고리를 등록하고 관리할 수 있다.
+   
+11. **배송지 관리**
+    - 고객 사용자는 배송지를 등록하고 관리할 수 있다.
+    - 배송지는 여러개 등록할 수 있으며, 기본 배송지를 선택할 수 있다.
 
 ### ERD
 ![ERD](./src/main/resources/static/images/erd.png)
@@ -53,18 +75,11 @@
   <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
 </div>
 
-
 ### 인프라 설계도
 ![Infra](./src/main/resources/static/images/infra.png)
 
 ### API docs
+📎 [전체 API 명세서 보러가기](https://docs.google.com/spreadsheets/d/1yKGRcgBnM2Gkw5XtqhH6qAzK9ZK9LEC4cRE_j-BvcyE/edit?gid=603954509#gid=603954509)
 
 ### 진행 일정 및 상세 정보 확인하기
-[3NFJ 팀 시트](https://docs.google.com/spreadsheets/d/1yKGRcgBnM2Gkw5XtqhH6qAzK9ZK9LEC4cRE_j-BvcyE/edit?gid=0#gid=0)
-
-- 팀원 역할분담
-- 서비스 구성 및 실행방법
-- 프로젝트 목적/상세
-- ERD
-- 기술 스택
-- (선택)API docs
+📎 [3NFJ 팀 시트](https://docs.google.com/spreadsheets/d/1yKGRcgBnM2Gkw5XtqhH6qAzK9ZK9LEC4cRE_j-BvcyE/edit?gid=0#gid=0)
