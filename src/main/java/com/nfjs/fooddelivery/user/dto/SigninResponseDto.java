@@ -1,6 +1,7 @@
 package com.nfjs.fooddelivery.user.dto;
 
 import com.nfjs.fooddelivery.user.entity.UserRoleEnum;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,6 +13,6 @@ public class SigninResponseDto {
 
   private String accessToken;
   private String refreshToken;
-  private String username;
+  private UUID userNumber;
   private UserRoleEnum role;
 }

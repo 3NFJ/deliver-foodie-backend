@@ -32,7 +32,7 @@ public class ReviewController {
         ReviewCreateResponseDto responseDto = reviewService.createReview(reviewCreateRequestDto,userDetails);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
-
+  
     @PutMapping("/reviews/{reviewId}")
     public ResponseEntity<ReviewModifyResponseDto> modifyReview(
             @PathVariable UUID reviewId,
