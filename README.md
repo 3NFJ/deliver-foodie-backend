@@ -14,8 +14,10 @@
 | 신영한 | Sub Leader | • 주문 시스템 구현<br>• 리뷰 기능 개발<br>• ERD 설계 및 데이터베이스 모델링<br> | [@github](https://github.com/syhan7516) |
 | 손동필 | Infra Leader | • 가게/메뉴 관리 시스템 구현<br>• Gemini AI 챗봇 서비스 연동<br>• AWS 인프라 설계 및 구축 | [@github](https://github.com/sdongpil) |
 
-### 서비스 구성 및 실행방법
+### 인프라 설계도
+![Infra](./src/main/resources/static/images/infra.png)
 
+### 서비스 구성 및 실행방법
 ### 필수 요구사항
 - Java 17
 - PostgreSQL 15
@@ -136,11 +138,11 @@ docker run --name postgres-container \
   <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
 </div>
 
-### 인프라 설계도
-![Infra](./src/main/resources/static/images/infra.png)
-
 ### API docs
 📎 [전체 API 명세서 보러가기](https://docs.google.com/spreadsheets/d/1yKGRcgBnM2Gkw5XtqhH6qAzK9ZK9LEC4cRE_j-BvcyE/edit?gid=603954509#gid=603954509)
+
+### 테이블 명세서
+📎 [전체 API 명세서 보러가기](https://docs.google.com/spreadsheets/d/1yKGRcgBnM2Gkw5XtqhH6qAzK9ZK9LEC4cRE_j-BvcyE/edit?gid=1640232430#gid=1640232430)
 
 ### 진행 일정 및 상세 정보 확인하기
 📎 [3NFJ 팀 시트](https://docs.google.com/spreadsheets/d/1yKGRcgBnM2Gkw5XtqhH6qAzK9ZK9LEC4cRE_j-BvcyE/edit?gid=0#gid=0)
