@@ -24,11 +24,19 @@ public class GlobalExceptionHandler {
   }
 
 
-    @ExceptionHandler(MenuException.class)
-    public ResponseEntity<ErrorResponse> handleMenuException(MenuException e) {
+  @ExceptionHandler(MenuException.class)
+  public ResponseEntity<ErrorResponse> handleMenuException(MenuException e) {
 
-        return ResponseEntity
-                .status(e.getErrorCode().getStatus())
-                .body(new ErrorResponse(e.getMessage()));
-    }
+      return ResponseEntity
+              .status(e.getErrorCode().getStatus())
+              .body(new ErrorResponse(e.getMessage()));
+  }
+
+  @ExceptionHandler(OrderException.class)
+  public ResponseEntity<ErrorResponse> handleOrderException(OrderException e) {
+    return ResponseEntity
+            .status(e.getErrorCode().getStatus())
+            .body(new ErrorResponse(e.getMessage()
+            ));
+  }
 }
