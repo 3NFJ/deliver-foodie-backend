@@ -2,6 +2,7 @@ package com.nfjs.fooddelivery.user.dto;
 
 import com.nfjs.fooddelivery.user.entity.User;
 import com.nfjs.fooddelivery.user.entity.UserRoleEnum;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 import lombok.Builder;
@@ -16,8 +17,8 @@ public class UserResponseDto {
   private String nickname;             // 닉네임
   private String phoneNumber;          // 전화번호
   private UserRoleEnum role;           // 권한
-  private String createdAt;            // 생성일시
-  private String updatedAt;            // 수정일시
+  private LocalDateTime createdAt;            // 생성일시
+  private LocalDateTime updatedAt;            // 수정일시
 
   public static UserResponseDto fromEntity(User user) {
     return UserResponseDto.builder()
@@ -27,8 +28,8 @@ public class UserResponseDto {
         .nickname(user.getNickname())
         .phoneNumber(user.getPhoneNumber())
         .role(user.getRole())
-        .createdAt(user.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-        .updatedAt(user.getUpdatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+        .createdAt(user.getCreatedAt())
+        .updatedAt(user.getUpdatedAt())
         .build();
   }
 }
