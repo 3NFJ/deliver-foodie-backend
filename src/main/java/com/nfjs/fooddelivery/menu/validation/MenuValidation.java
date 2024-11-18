@@ -63,7 +63,7 @@ public class MenuValidation {
         }
 
         if (!user.getUserId().equals(shop.getUser().getUserId())) {
-            throw new MenuException(STORE_OWNER_MISMATCH);
+            throw new MenuException(SHOP_OWNER_MISMATCH);
         }
     }
 }

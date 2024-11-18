@@ -6,6 +6,10 @@ import com.nfjs.fooddelivery.menu.dto.MenuUpdateRequestDto;
 import com.nfjs.fooddelivery.menu.service.MenuService;
 import com.nfjs.fooddelivery.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -31,5 +35,22 @@ public class MenuController {
         MenuResponseDto responseDto = menuService.updateMenu(menuId, requestDto, userDetails.getUser());
 
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+    }
+
+    @PatchMapping("/menus/{menuId}")
+    public ResponseEntity<Void> deleteMenu(@PathVariable UUID menuId, @RequestParam Long userId) {
+        menuService.deleteMenu(menuId, userId);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping("/shops/{shopId}/menus")
+    public ResponseEntity<Page<MenuResponseDto>> getMenuList(@PathVariable UUID shopId,
+                                                       @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Sort.Direction.DESC)
+                                                       Pageable pageable) {
+
+        Page<MenuResponseDto> menuList = menuService.getMenuList(shopId, pageable);
+
+        return ResponseEntity.status(HttpStatus.OK).body(menuList);
     }
 }

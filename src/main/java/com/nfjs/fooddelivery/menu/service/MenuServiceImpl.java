@@ -12,12 +12,15 @@ import com.nfjs.fooddelivery.shop.repository.ShopRepository;
 import com.nfjs.fooddelivery.user.entity.User;
 import com.nfjs.fooddelivery.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
 import static com.nfjs.fooddelivery.common.excetpion.ErrorCode.MENU_NOT_FOUNT;
+import static com.nfjs.fooddelivery.common.excetpion.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -49,5 +52,27 @@ public class MenuServiceImpl implements MenuService {
         menu.update(requestDto);
 
         return MenuResponseDto.from(menu);
+    }
+
+    @Override
+    @Transactional
+    public void deleteMenu(UUID menuId, Long userId) {
+        Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new MenuException(MENU_NOT_FOUND));
+        User user = userRepository.findById(userId).orElseThrow(() -> new MenuException(USER_NOT_FOUND));
+
+        if (!menu.getShop().getUser().getUserId().equals(userId)) {
+            throw new MenuException(SHOP_OWNER_MISMATCH);
+        }
+
+        menu.delete(user.getUsername());
+    }
+
+    @Override
+    public Page<MenuResponseDto> getMenuList(UUID shopId, Pageable pageable) {
+        //todo shop 브랜치 병합 시 예외 처리
+        Shop shop = shopRepository.findById(shopId).orElseThrow();
+        Page<Menu> menus = menuRepository.findAllByShop(shop, pageable);
+
+        return menus.map(MenuResponseDto::from);
     }
 }
