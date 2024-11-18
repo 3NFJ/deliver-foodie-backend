@@ -71,10 +71,14 @@ public class Order extends BaseEntity {
     @Column(name = "shop_request")
     private String shopRequest;
 
+    public void modifyStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
     public Order(OrderCreateRequestDto orderCreateRequestDto, User user, Shop shop) {
         this.user = user;
         this.shop = shop;
-        this.orderNumber = LocalDate.now().toString().replace("-","");
+        this.orderNumber = LocalDate.now().toString().replace("-","")+Math.random();
         this.orderStatus = OrderStatus.PENDING;
         this.paymentMethod = orderCreateRequestDto.getPaymentMethod();
         this.paymentStatus = PaymentStatus.REQUESTED;

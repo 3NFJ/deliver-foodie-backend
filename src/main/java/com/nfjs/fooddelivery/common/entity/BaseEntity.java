@@ -34,9 +34,9 @@ public class BaseEntity {
 
   private String deletedBy;
 
-  public void delete(String deletedBy) {
-    this.deletedBy = deletedBy;
-    this.deletedAt = LocalDateTime.now();
-  }
+    public void delete(String deletedBy) {
+        this.deletedAt = LocalDateTime.now();
+        this.deletedBy = deletedBy;
+    }
 }
 
