@@ -1,5 +1,7 @@
 package com.nfjs.fooddelivery.review.controller;
 
+import com.nfjs.fooddelivery.common.excetpion.ErrorCode;
+import com.nfjs.fooddelivery.common.excetpion.ReviewException;
 import com.nfjs.fooddelivery.review.dto.*;
 import com.nfjs.fooddelivery.review.dto.ReviewCreateRequestDto;
 import com.nfjs.fooddelivery.review.dto.ReviewCreateResponseDto;
@@ -52,6 +54,21 @@ public class ReviewController {
 
         log.info("리뷰 조회 URL 맵핑 : OK");
         ReviewGetResponseDto responseDto = reviewService.getReview(reviewId,userDetails);
+        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+    }
+
+    @GetMapping("/shops/{shopId}/reviews")
+    public ResponseEntity<ReviewGetShopResponseDto> getReviewShop(
+            @PathVariable UUID shopId,
+            @RequestParam("page") int page,
+            @RequestParam("size") int size) {
+
+        log.info("매장별 리뷰 조회 URL 맵핑 : OK");
+
+        if(!(size==10 || size==30 || size==50))
+            throw new ReviewException(ErrorCode.INVALID_INPUT_VALUE);
+
+        ReviewGetShopResponseDto responseDto = reviewService.getReviewShop(shopId, page-1, size);
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 }

@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -70,6 +71,30 @@ public class WebSecurityConfig {
             "/",            // 메인 페이지
             "/error"        // 에러 페이지
         ).permitAll()
+
+        .requestMatchers(HttpMethod.POST, "/api/shops").hasAnyRole("MANAGER", "MASTER")
+        .requestMatchers(HttpMethod.GET, "/api/shops/*").hasAnyRole("CUSTOMER", "OWNER", "MANAGER", "MASTER")
+        .requestMatchers(HttpMethod.PUT,"/api/shops/{shopId}").hasAnyRole("MANAGER", "MASTER")
+        .requestMatchers(HttpMethod.PATCH,"/api/shops/{shopId}").hasAnyRole("MANAGER", "MASTER")
+
+        .requestMatchers(HttpMethod.POST,"/api/shops/{shopId}/menus").hasAnyRole("OWNER","MANAGER", "MASTER")
+        .requestMatchers("/api/menus/{menuId}").hasAnyRole("OWNER","MANAGER", "MASTER")
+        .requestMatchers("/api/shops/{shopId}/menus/**").hasAnyRole("OWNER","MANAGER", "MASTER")
+
+        .requestMatchers("/api/shops/{shopId}/orders").hasAnyRole("CUSTOMER")
+        .requestMatchers("/api/orders/{orderId}/*").hasAnyRole("CUSTOMER", "OWNER", "MANAGER", "MASTER")
+        .requestMatchers(HttpMethod.GET,"/api/orders").hasAnyRole("CUSTOMER", "MANAGER", "MASTER")
+
+        .requestMatchers(HttpMethod.POST, "/api/addresses").hasAnyRole("CUSTOMER")
+
+        .requestMatchers(HttpMethod.POST, "/api/categories").hasAnyRole("MANAGER, MASTER")
+
+        .requestMatchers(HttpMethod.POST, "/api/reviews/**").hasAnyRole("CUSTOMER")
+        .requestMatchers(HttpMethod.PATCH, "/api/reviews/{reviewId}").hasAnyRole("CUSTOMER", "MANAGER", "MASTER")
+        .requestMatchers(HttpMethod.GET, "/api/reviews/{reviewId}").hasAnyRole("CUSTOMER", "OWNER","MANAGER", "MASTER")
+
+        .requestMatchers("/api/ai/**").hasAnyRole("OWNER", "MANAGER", "MASTER")
+
         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
         .anyRequest().authenticated()
     );

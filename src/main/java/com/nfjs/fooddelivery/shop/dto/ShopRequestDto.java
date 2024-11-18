@@ -8,8 +8,7 @@ import com.nfjs.fooddelivery.user.entity.User;
 import java.time.LocalTime;
 import java.util.UUID;
 
-public record ShopRequestDto(Long userId,
-                             String name,
+public record ShopRequestDto(String name,
                              UUID categoryId,
                              String address,
                              String phoneNumber,
