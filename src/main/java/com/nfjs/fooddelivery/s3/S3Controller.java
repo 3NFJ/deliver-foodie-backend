@@ -1,9 +1,10 @@
-package com.nfjs.fooddelivery.s3.controller;
+package com.nfjs.fooddelivery.s3;
 
-import com.nfjs.fooddelivery.s3.S3Service;
+import com.nfjs.fooddelivery.security.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,7 +24,7 @@ public class S3Controller {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadImage(@RequestParam("image") MultipartFile image) throws IOException {
+    public ResponseEntity<String> uploadImage(@RequestParam("image") MultipartFile image, @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
         String imageUrl = s3Service.uploadImage(image);
 
         return ResponseEntity.status(HttpStatus.OK).body(imageUrl);
