@@ -37,4 +37,5 @@ public enum ErrorCode {
     this.status = status;
     this.message = message;
   }
+
 }

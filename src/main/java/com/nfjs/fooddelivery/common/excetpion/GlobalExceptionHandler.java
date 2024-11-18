@@ -102,4 +102,14 @@ public class GlobalExceptionHandler {
             e.getMessage()
         ));
   }
+
+  @ExceptionHandler(UserException.class)
+  public ResponseEntity<ErrorResponse> handleUserException(UserException e) {
+    return ResponseEntity
+        .status(e.getErrorCode().getStatus())
+        .body(new ErrorResponse(
+            e.getErrorCode().getStatus().value(),
+            e.getMessage()
+        ));
+  }
 }

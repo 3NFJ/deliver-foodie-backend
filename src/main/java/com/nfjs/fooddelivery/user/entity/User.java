@@ -1,6 +1,7 @@
 package com.nfjs.fooddelivery.user.entity;
 
 import com.nfjs.fooddelivery.common.entity.BaseEntity;
+import com.nfjs.fooddelivery.user.dto.UpdateUserRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -68,6 +69,24 @@ public class User extends BaseEntity {
   public void generateUserNumber() {
     if (this.userNumber == null) {
       this.userNumber = UUID.randomUUID();
+    }
+  }
+
+  public void update(UpdateUserRequestDto dto, String encodedPassword) {
+    if (dto.getEmail() != null && !dto.getEmail().isEmpty()) {
+      this.email = dto.getEmail();
+    }
+    if (encodedPassword != null) {
+      this.password = encodedPassword;
+    }
+    if (dto.getUsername() != null && !dto.getUsername().isEmpty()) {
+      this.username = dto.getUsername();
+    }
+    if (dto.getNickname() != null && !dto.getNickname().isEmpty()) {
+      this.nickname = dto.getNickname();
+    }
+    if (dto.getPhoneNumber() != null && !dto.getPhoneNumber().isEmpty()) {
+      this.phoneNumber = dto.getPhoneNumber();
     }
   }
 
