@@ -18,17 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class UserController {
 
-  private final UserService userService;
 
-  @PostMapping("/auth/signup")
-  public ResponseEntity<SignupResponseDto> signup(@RequestBody @Valid SignupRequestDto request) {
-    SignupResponseDto response = userService.signupUser(request);
-
-    log.debug("=== Controller Debug ===");
-    log.debug("Received signup request");
-    log.debug("Request DTO: {}", request);
-
-    return ResponseEntity.ok(response);
-  }
 
 }
