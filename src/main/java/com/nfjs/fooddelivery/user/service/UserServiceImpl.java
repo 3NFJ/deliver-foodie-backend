@@ -1,9 +1,12 @@
 package com.nfjs.fooddelivery.user.service;
 
+import com.nfjs.fooddelivery.common.excetpion.ErrorCode;
+import com.nfjs.fooddelivery.common.excetpion.UserException;
 import com.nfjs.fooddelivery.user.dto.SignupRequestDto;
 import com.nfjs.fooddelivery.user.dto.SignupResponseDto;
 import com.nfjs.fooddelivery.user.dto.UpdateUserRequestDto;
 import com.nfjs.fooddelivery.user.dto.UpdateUserResponseDto;
+import com.nfjs.fooddelivery.user.dto.UserResponseDto;
 import com.nfjs.fooddelivery.user.entity.User;
 import com.nfjs.fooddelivery.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +35,7 @@ public class UserServiceImpl implements UserService {
   public UpdateUserResponseDto updateUser(Long userId, UpdateUserRequestDto request) {
 
     User user = userRepository.findByUserId(userId)
-        .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+        .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
 
     String encodedPassword = null;
     if (request.getPassword() != null && request.getPassword().isEmpty()) {
@@ -43,4 +46,18 @@ public class UserServiceImpl implements UserService {
     return UpdateUserResponseDto.fromEntity(user);
   }
 
+  public UserResponseDto getUserById(Long userId) {
+    User user = userRepository.findByUserId(userId)
+        .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
+
+    return UserResponseDto.fromEntity(user);
+  }
+
+  @Transactional
+  public void deleteUser(Long userId, String deletedBy) {
+    User user = userRepository.findByUserId(userId)
+        .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
+
+    user.delete(deletedBy);
+  }
 }
