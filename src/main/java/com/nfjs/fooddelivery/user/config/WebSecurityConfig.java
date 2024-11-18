@@ -87,6 +87,8 @@ public class WebSecurityConfig {
 
         .requestMatchers(HttpMethod.POST, "/api/addresses").hasAnyRole("CUSTOMER")
 
+        .requestMatchers(HttpMethod.POST, "/api/categories").hasAnyRole("MANAGER, MASTER")
+
         .requestMatchers(HttpMethod.POST, "/api/reviews/**").hasAnyRole("CUSTOMER")
         .requestMatchers(HttpMethod.PATCH, "/api/reviews/{reviewId}").hasAnyRole("CUSTOMER", "MANAGER", "MASTER")
         .requestMatchers(HttpMethod.GET, "/api/reviews/{reviewId}").hasAnyRole("CUSTOMER", "OWNER","MANAGER", "MASTER")
