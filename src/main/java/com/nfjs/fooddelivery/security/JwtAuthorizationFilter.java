@@ -7,6 +7,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -36,32 +37,20 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     String tokenValue = jwtUtil.getJwtFromHeader(req); // 토큰 추출
 
     if (StringUtils.hasText(tokenValue)) {
-      try {
-        jwtUtil.validateToken(tokenValue); // 토큰 유효성 검사
-        Claims info = jwtUtil.getUserInfoFromToken(tokenValue); // 사용자 정보 추출
-        UserDetailsImpl userDetails = (UserDetailsImpl) userDetailsService.loadUserByUsername(info.getSubject());
+      jwtUtil.validateToken(tokenValue); // 토큰 유효성 검사
+      Claims info = jwtUtil.getUserInfoFromToken(tokenValue); // 사용자 정보 추출
+      UUID userNumber = UUID.fromString(info.getSubject());
 
-        if (!userDetails.getUser().isValidTokenCreatedAt()) {
-          throw new AuthenticationException("로그아웃된 토큰입니다.") {};
-        }
+      UserDetailsImpl userDetails = (UserDetailsImpl) userDetailsService.loadUserByUserNumber(userNumber);
 
-        setAuthentication(info.getSubject()); // 인증정보 설정
-
-      } catch (AuthenticationException e) {
-        throw e;
+      if (!userDetails.getUser().isValidTokenCreatedAt()) {
+        throw new AuthenticationException("로그아웃된 토큰입니다.") {};
       }
+
+      setAuthentication(userDetails.getUsername());
     }
     filterChain.doFilter(req, res);
     log.debug("=== JwtAuthorizationFilter completed ===");
-  }
-
-  private boolean validateAndGetUser(String token) {
-    if (!jwtUtil.validateToken(token)) {
-      return false;
-    }
-    Claims info = jwtUtil.getUserInfoFromToken(token);
-    setAuthentication(info.getSubject());
-    return true;
   }
 
   /**

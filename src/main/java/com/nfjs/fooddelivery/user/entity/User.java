@@ -3,7 +3,7 @@ package com.nfjs.fooddelivery.user.entity;
 import com.nfjs.fooddelivery.common.entity.BaseEntity;
 import com.nfjs.fooddelivery.deliveryaddress.entity.DeliveryAddress;
 import jakarta.persistence.*;
-
+import com.nfjs.fooddelivery.user.dto.UpdateUserRequestDto;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,10 +48,10 @@ public class User extends BaseEntity {
 
   @Column(name = "token_created_at", nullable = true) // 최초 회원가입시 null
   private LocalDateTime tokenCreatedAt;
-  
+
   @OneToMany(mappedBy = "user")
   private List<DeliveryAddress> deliveryAddressList = new ArrayList<>();
-  
+
   public void updateTokenCreatedAt(LocalDateTime time) {  // 토큰 생성 시간 업데이트
     this.tokenCreatedAt = time;
   }
@@ -62,11 +62,29 @@ public class User extends BaseEntity {
     }
     return this.tokenCreatedAt.plusDays(7).isAfter(LocalDateTime.now());
   }
-
+  
   @PrePersist
   public void generateUserNumber() {
     if (this.userNumber == null) {
       this.userNumber = UUID.randomUUID();
+    }
+  }
+
+  public void update(UpdateUserRequestDto dto, String encodedPassword) {
+    if (dto.getEmail() != null && !dto.getEmail().isEmpty()) {
+      this.email = dto.getEmail();
+    }
+    if (encodedPassword != null) {
+      this.password = encodedPassword;
+    }
+    if (dto.getUsername() != null && !dto.getUsername().isEmpty()) {
+      this.username = dto.getUsername();
+    }
+    if (dto.getNickname() != null && !dto.getNickname().isEmpty()) {
+      this.nickname = dto.getNickname();
+    }
+    if (dto.getPhoneNumber() != null && !dto.getPhoneNumber().isEmpty()) {
+      this.phoneNumber = dto.getPhoneNumber();
     }
   }
 
