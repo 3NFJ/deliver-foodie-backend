@@ -7,10 +7,12 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,14 +27,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
   private final JwtUtil jwtUtil;
 
   @Override
-  protected boolean shouldNotFilter(HttpServletRequest request) {
-    String path = request.getRequestURI();
-    boolean shouldNotFilter = path.startsWith("/api/auth/");
-    log.debug("URI: {}, Should Not Filter: {}", path, shouldNotFilter);
-    return shouldNotFilter;
-  }
-
-  @Override
   protected void doFilterInternal(
       HttpServletRequest req,
       HttpServletResponse res,
@@ -40,33 +34,29 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
   ) throws ServletException, IOException {
 
     log.debug("=== JwtAuthorizationFilter starting ===");
-    log.debug("Request URI: {}", req.getRequestURI());
-    log.debug("Request Method: {}", req.getMethod());
-
-    String tokenValue = jwtUtil.getJwtFromHeader(req);
+    String tokenValue = jwtUtil.getJwtFromHeader(req); // 토큰 추출
 
     if (StringUtils.hasText(tokenValue)) {
+      jwtUtil.validateToken(tokenValue); // 토큰 유효성 검사
+      Claims info = jwtUtil.getUserInfoFromToken(tokenValue); // 사용자 정보 추출
+      UUID userNumber = UUID.fromString(info.getSubject());
 
-      if (!jwtUtil.validateToken(tokenValue)) {
-        log.error("Token Error");
-        return;
+      UserDetailsImpl userDetails = (UserDetailsImpl) userDetailsService.loadUserByUserNumber(userNumber);
+
+      if (!userDetails.getUser().isValidTokenCreatedAt()) {
+        throw new AuthenticationException("로그아웃된 토큰입니다.") {};
       }
 
-      Claims info = jwtUtil.getUserInfoFromToken(tokenValue);
-
-      try {
-        setAuthentication(info.getSubject());
-      } catch (Exception e) {
-        log.error(e.getMessage());
-        return;
-      }
+      setAuthentication(userDetails.getUsername());
     }
-
     filterChain.doFilter(req, res);
     log.debug("=== JwtAuthorizationFilter completed ===");
   }
 
-  // 인증 처리
+  /**
+   * JWT 토큰에서 추출한 사용자 정보를 SecurityContext에 저장
+   * @param username 인증할 사용자의 username
+   */
   public void setAuthentication(String username) {
     SecurityContext context = SecurityContextHolder.createEmptyContext();
     Authentication authentication = createAuthentication(username);
@@ -75,9 +65,18 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     SecurityContextHolder.setContext(context);
   }
 
-  // 인증 객체 생성
+  /**
+   * 사용자 정보를 기반으로 Authentication 객체를 생성함
+   *
+   * @param username 인증할 사용자의 username
+   * @return 생성된 Authentication 객체
+   */
   private Authentication createAuthentication(String username) {
     UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-    return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+    return new UsernamePasswordAuthenticationToken(
+        userDetails,
+        null,
+        userDetails.getAuthorities()
+    );
   }
 }
