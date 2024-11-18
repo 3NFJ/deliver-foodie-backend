@@ -1,7 +1,7 @@
 package com.nfjs.fooddelivery.s3;
 
 import com.nfjs.fooddelivery.security.UserDetailsImpl;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -15,13 +15,9 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class S3Controller {
     private final S3Service s3Service;
-
-    @Autowired
-    public S3Controller(S3Service s3Service) {
-        this.s3Service = s3Service;
-    }
 
     @PostMapping("/upload")
     public ResponseEntity<String> uploadImage(@RequestParam("image") MultipartFile image, @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
