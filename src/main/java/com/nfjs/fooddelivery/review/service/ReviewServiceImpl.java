@@ -5,6 +5,8 @@ import com.nfjs.fooddelivery.order.entity.Order;
 import com.nfjs.fooddelivery.order.repository.OrderRepository;
 import com.nfjs.fooddelivery.review.dto.ReviewCreateRequestDto;
 import com.nfjs.fooddelivery.review.dto.ReviewCreateResponseDto;
+import com.nfjs.fooddelivery.review.dto.ReviewModifyRequestDto;
+import com.nfjs.fooddelivery.review.dto.ReviewModifyResponseDto;
 import com.nfjs.fooddelivery.review.entity.Review;
 import com.nfjs.fooddelivery.review.repository.ReviewRepository;
 import com.nfjs.fooddelivery.shop.entitiy.Shop;
@@ -16,6 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -44,5 +48,17 @@ public class ReviewServiceImpl implements ReviewService {
 
         log.info("리뷰 등록 서비스 호출 : END");
         return new ReviewCreateResponseDto(review);
+    }
+  
+    @Override
+    @Transactional
+    public ReviewModifyResponseDto modifyReview(UUID reviewId, ReviewModifyRequestDto reviewModifyRequestDto, UserDetails userDetails) {
+
+        log.info("리뷰 수정 서비스 호출 : START");
+        Review review = reviewRepository.findById(reviewId).orElseThrow();
+        review.modifyReview(reviewModifyRequestDto);
+
+        log.info("리뷰 수정 서비스 호출 : END");
+        return new ReviewModifyResponseDto(review);
     }
 }

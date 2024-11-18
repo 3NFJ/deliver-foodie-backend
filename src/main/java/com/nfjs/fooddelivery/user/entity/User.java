@@ -62,7 +62,7 @@ public class User extends BaseEntity {
     }
     return this.tokenCreatedAt.plusDays(7).isAfter(LocalDateTime.now());
   }
-
+  
   @PrePersist
   public void generateUserNumber() {
     if (this.userNumber == null) {

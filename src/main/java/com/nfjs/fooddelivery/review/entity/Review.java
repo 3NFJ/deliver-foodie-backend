@@ -4,6 +4,7 @@ import com.nfjs.fooddelivery.common.entity.BaseEntity;
 import com.nfjs.fooddelivery.deliveryaddress.entity.DeliveryAddress;
 import com.nfjs.fooddelivery.order.entity.Order;
 import com.nfjs.fooddelivery.review.dto.ReviewCreateRequestDto;
+import com.nfjs.fooddelivery.review.dto.ReviewModifyRequestDto;
 import com.nfjs.fooddelivery.shop.entitiy.Shop;
 import com.nfjs.fooddelivery.user.entity.User;
 import jakarta.persistence.*;
@@ -53,6 +54,12 @@ public class Review extends BaseEntity {
 
     @Column(name = "review_image")
     private String reviewImage;
+
+    public void modifyReview(ReviewModifyRequestDto reviewModifyRequestDto) {
+        this.content = reviewModifyRequestDto.getContent();
+        this.rating = reviewModifyRequestDto.getRating();
+        this.reviewImage = reviewModifyRequestDto.getReviewImage();
+    }
 
     public Review(ReviewCreateRequestDto reviewCreateRequestDto, Shop shop, Order order, User user, DeliveryAddress deliveryAddress) {
         this.shop = shop;
