@@ -50,4 +50,15 @@ public class ReviewController {
         ReviewGetResponseDto responseDto = reviewService.getReview(reviewId,userDetails);
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
+
+    @GetMapping("/shops/{shopId}/reviews")
+    public ResponseEntity<ReviewGetShopResponseDto> getReviewShop(
+            @PathVariable UUID shopId,
+            @RequestParam("page") int page,
+            @RequestParam("size") int size) {
+
+        log.info("매장별 리뷰 조회 URL 맵핑 : OK");
+        ReviewGetShopResponseDto responseDto = reviewService.getReviewShop(shopId, page-1, size);
+        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+    }
 }

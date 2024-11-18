@@ -12,10 +12,15 @@ import com.nfjs.fooddelivery.user.entity.User;
 import com.nfjs.fooddelivery.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -69,5 +74,23 @@ public class ReviewServiceImpl implements ReviewService {
 
         log.info("리뷰 조회 서비스 호출 : END");
         return new ReviewGetResponseDto(review);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ReviewGetShopResponseDto getReviewShop(UUID shopId, int page, int size) {
+
+        log.info("매장별 리뷰 조회 서비스 호출 : START");
+        Shop shop = shopRepository.findById(shopId).orElseThrow();
+        Page<Review> reviews = reviewRepository.findAllByShopOrderByCreatedAtDesc(shop, PageRequest.of(page,size));
+        Double averageRating = reviewRepository.averageRating();
+
+        log.info("매장별 리뷰 담기 : START");
+        List<ReviewGetShopDto> reviewGetShopDtos = new ArrayList<>();
+        for(Review review: reviews) reviewGetShopDtos.add(new ReviewGetShopDto(review));
+
+        log.info("매장별 리뷰 담기 : END");
+        log.info("매장별 리뷰 조회 서비스 호출 : END");
+        return new ReviewGetShopResponseDto(shop, averageRating, reviewGetShopDtos);
     }
 }

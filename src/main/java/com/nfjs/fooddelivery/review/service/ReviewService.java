@@ -12,4 +12,6 @@ public interface ReviewService {
     ReviewModifyResponseDto modifyReview(UUID reviewId, ReviewModifyRequestDto reviewModifyRequestDto, UserDetails userDetails);
 
     ReviewGetResponseDto getReview(UUID reviewId, UserDetails userDetails);
+
+    ReviewGetShopResponseDto getReviewShop(UUID shopId, int page, int size);
 }
