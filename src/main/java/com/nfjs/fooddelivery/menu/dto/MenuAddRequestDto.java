@@ -4,7 +4,7 @@ import com.nfjs.fooddelivery.menu.entity.Menu;
 import com.nfjs.fooddelivery.menu.enums.MenuStatus;
 import com.nfjs.fooddelivery.shop.entitiy.Shop;
 
-public record MenuRequestDto(
+public record MenuAddRequestDto(
         String menuName,
         int menuPrice,
         String menuImage,
