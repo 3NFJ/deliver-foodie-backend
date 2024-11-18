@@ -103,6 +103,15 @@ public class GlobalExceptionHandler {
         ));
   }
 
+  @ExceptionHandler(ReviewException.class)
+  public ResponseEntity<ErrorResponse> handleReviewException(ReviewException e) {
+    return ResponseEntity
+            .status(e.getErrorCode().getStatus())
+            .body(new ErrorResponse(
+                    e.getErrorCode().getStatus().value(),
+                    e.getMessage()
+            ));
+    
   @ExceptionHandler(UserException.class)
   public ResponseEntity<ErrorResponse> handleUserException(UserException e) {
     return ResponseEntity
