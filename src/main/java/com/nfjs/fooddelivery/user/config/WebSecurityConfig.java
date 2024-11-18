@@ -4,6 +4,7 @@ import com.nfjs.fooddelivery.jwt.JwtUtil;
 import com.nfjs.fooddelivery.security.JwtAuthenticationFilter;
 import com.nfjs.fooddelivery.security.JwtAuthorizationFilter;
 import com.nfjs.fooddelivery.security.UserDetailsServiceImpl;
+import com.nfjs.fooddelivery.user.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -13,6 +14,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -27,6 +29,7 @@ public class WebSecurityConfig {
   private final JwtUtil jwtUtil;
   private final UserDetailsServiceImpl userDetailsService;
   private final AuthenticationConfiguration authenticationConfiguration;
+  private final AuthService authService;
 
   @Bean
   public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -40,9 +43,10 @@ public class WebSecurityConfig {
   }
 
   @Bean
-  public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
-    JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil);
+  public JwtAuthenticationFilter jwtAuthenticationFilter(JwtUtil jwtUtil, AuthService authService) throws Exception {
+    JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil, authService);
     filter.setAuthenticationManager(authenticationManager(authenticationConfiguration));
+
     return filter;
   }
 
@@ -53,7 +57,7 @@ public class WebSecurityConfig {
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    http.csrf((csrf) -> csrf.disable());
+    http.csrf(AbstractHttpConfigurer::disable);
 
     http.sessionManagement((sessionManagement) ->
         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -63,8 +67,6 @@ public class WebSecurityConfig {
         .requestMatchers(
             "/api/auth/signup",
             "/api/auth/signin",
-            "/api/auth/**",  // 인증 관련 엔드포인트
-            "/api/user/login",
             "/",            // 메인 페이지
             "/error"        // 에러 페이지
         ).permitAll()
@@ -73,7 +75,7 @@ public class WebSecurityConfig {
     );
 
     http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
-    http.addFilterAfter(jwtAuthenticationFilter(), JwtAuthorizationFilter.class);
+    http.addFilterAfter(jwtAuthenticationFilter(jwtUtil, authService), JwtAuthorizationFilter.class);
 
     return http.build();
   }
