@@ -9,7 +9,7 @@ import com.nfjs.fooddelivery.shop.dto.ShopResponseDto;
 import com.nfjs.fooddelivery.shop.entitiy.Shop;
 import com.nfjs.fooddelivery.shop.repository.ShopRepository;
 import com.nfjs.fooddelivery.user.entity.User;
-import com.nfjs.fooddelivery.user.repository.UserRepository;
+import com.nfjs.fooddelivery.user.entity.UserRoleEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -26,23 +26,24 @@ import java.util.regex.Pattern;
 @Slf4j
 public class ShopServiceImpl implements ShopService {
     private final ShopRepository shopRepository;
-    private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
 
     @Override
-    public ShopResponseDto createShop(ShopRequestDto requestDto) {
+    public ShopResponseDto createShop(ShopRequestDto requestDto, User user) {
         // 회원 검증
-        User user = userRepository.findById(requestDto.userId()).orElseThrow();
         Category category = categoryRepository.findById(requestDto.categoryId()).orElseThrow();
+        if (user.getRole().equals(UserRoleEnum.CUSTOMER)) {
+            throw new ShopException(ErrorCode.MENU_PERMISSION_DENIED);
+        }
 
-        String requestShopName = requestDto.name();
-        if (!Pattern.matches("^[a-zA-Z가-힣0-9]+$", requestShopName)) {
+        String shopName = requestDto.name();
+        if (!Pattern.matches("^[a-zA-Z가-힣0-9]+$", shopName)) {
             throw new ShopException(ErrorCode.INVALID_SHOP_NAME);
         }
 
         List<Shop> shopList = shopRepository.findAll();
         for (Shop shop : shopList) {
-            if (shop.getShopName().equals(requestShopName)) {
+            if (shop.getShopName().equals(shopName)) {
                 throw new ShopException(ErrorCode.DUPLICATE_SHOP_NAME);
             }
         }
@@ -54,9 +55,12 @@ public class ShopServiceImpl implements ShopService {
 
     @Override
     @Transactional
-    public ShopResponseDto updateShop(UUID shopId, ShopRequestDto requestDto) {
-        Shop entity = shopRepository.findById(shopId).orElseThrow(() -> new IllegalStateException(ErrorCode.SHOP_NOT_FOUND.getMessage()));
+    public ShopResponseDto updateShop(UUID shopId, ShopRequestDto requestDto, User user) {
+        Shop entity = shopRepository.findById(shopId).orElseThrow(() -> new ShopException(ErrorCode.SHOP_NOT_FOUND));
         Category category = categoryRepository.findById(requestDto.categoryId()).orElseThrow();
+        if (user.getRole().equals(UserRoleEnum.CUSTOMER)) {
+            throw new ShopException(ErrorCode.MENU_PERMISSION_DENIED);
+        }
 
         String shopName = requestDto.name();
         if (!Pattern.matches("^[a-zA-Z가-힣0-9]+$", shopName)) {
@@ -70,14 +74,12 @@ public class ShopServiceImpl implements ShopService {
 
     @Override
     @Transactional
-    public void deleteShop(UUID shopId, Long userId) {
-        Shop shop = shopRepository.findById(shopId).orElseThrow(() -> new IllegalStateException(ErrorCode.SHOP_NOT_FOUND.getMessage()));
+    public void deleteShop(UUID shopId, User user) {
+        Shop shop = shopRepository.findById(shopId).orElseThrow(() -> new ShopException(ErrorCode.SHOP_NOT_FOUND));
 
-        if (!shop.getUser().getUserId().equals(userId)) {
-            throw new ShopException(ErrorCode.USER_NOT_MATCH);
+        if (!shop.getUser().getUserId().equals(user.getUserId())) {
+            throw new ShopException(ErrorCode.MENU_PERMISSION_DENIED);
         }
-
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalStateException(ErrorCode.USER_NOT_FOUND.getMessage()));
 
         shop.delete(user.getUsername());
     }
@@ -91,7 +93,7 @@ public class ShopServiceImpl implements ShopService {
 
     @Override
     public ShopResponseDto getShopDetail(UUID shopId) {
-        Shop shop = shopRepository.findByShopIdAndDeletedAtIsNull(shopId).orElseThrow(() -> new IllegalStateException(ErrorCode.SHOP_NOT_FOUND.getMessage()));
+        Shop shop = shopRepository.findByShopIdAndDeletedAtIsNull(shopId).orElseThrow(() -> new ShopException(ErrorCode.SHOP_NOT_FOUND));
 
         return ShopResponseDto.from(shop);
     }
