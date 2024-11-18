@@ -38,8 +38,8 @@ public class MenuController {
     }
 
     @PatchMapping("/menus/{menuId}")
-    public ResponseEntity<Void> deleteMenu(@PathVariable UUID menuId, @RequestParam Long userId) {
-        menuService.deleteMenu(menuId, userId);
+    public ResponseEntity<Void> deleteMenu(@PathVariable UUID menuId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        menuService.deleteMenu(menuId, userDetails.getUser());
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

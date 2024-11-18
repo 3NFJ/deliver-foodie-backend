@@ -12,7 +12,7 @@ import java.util.UUID;
 public interface MenuService {
 
     MenuResponseDto addMenu(UUID shopId, MenuAddRequestDto requestDto, User userDetails);
-    void deleteMenu(UUID menuId, Long userId);
+    void deleteMenu(UUID menuId, User userId);
     Page<MenuResponseDto> getMenuList(UUID shopId, Pageable pageable);
     MenuResponseDto updateMenu(UUID menuId, MenuUpdateRequestDto requestDto, User user);
 }
