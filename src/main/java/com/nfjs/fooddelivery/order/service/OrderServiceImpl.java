@@ -13,10 +13,14 @@ import com.nfjs.fooddelivery.user.entity.User;
 import com.nfjs.fooddelivery.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -78,5 +82,22 @@ public class OrderServiceImpl implements OrderService {
 
         log.info("주문 상태 변경 서비스 호출 : END");
         return new OrderGetStatusResponseDto(user.getUserId(), order.getShop().getShopId(), order.getOrderId(), order.getOrderStatus());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<OrderGetResponseDto> getOrderList(UserDetails userDetails, int page, int size) {
+
+        log.info("주문 목록 조회 서비스 호출 : START");
+        User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow();
+        Page<Order> orders = orderRepository.findAllByUserOrderByCreatedAtDesc(user,PageRequest.of(page,size));
+
+        log.info("주문 목록 담기 : START");
+        List<OrderGetResponseDto> orderGetListResponseDto = new ArrayList<>();
+        for(Order order: orders) orderGetListResponseDto.add(new OrderGetResponseDto(order));
+
+        log.info("주문 목록 담기 : END");
+        log.info("주문 목록 조회 서비스 호출 : END");
+        return orderGetListResponseDto;
     }
 }
