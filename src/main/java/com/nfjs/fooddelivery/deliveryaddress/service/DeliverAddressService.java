@@ -1,12 +1,10 @@
 package com.nfjs.fooddelivery.deliveryaddress.service;
 
-import com.nfjs.fooddelivery.common.excetpion.ErrorCode;
 import com.nfjs.fooddelivery.deliveryaddress.dto.DeliveryAddressRequestDto;
 import com.nfjs.fooddelivery.deliveryaddress.dto.DeliveryAddressResponseDto;
 import com.nfjs.fooddelivery.deliveryaddress.entity.DeliveryAddress;
 import com.nfjs.fooddelivery.deliveryaddress.repository.DeliveryAddressRepository;
 import com.nfjs.fooddelivery.user.entity.User;
-import com.nfjs.fooddelivery.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +12,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class DeliverAddressService {
     private final DeliveryAddressRepository deliveryAddressRepository;
-    private final UserRepository userRepository;
 
-    public DeliveryAddressResponseDto addAddress(DeliveryAddressRequestDto requestDto) {
-        Long userId = requestDto.getUserId();
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalStateException(ErrorCode.USER_NOT_FOUND.getMessage()));
+    public DeliveryAddressResponseDto addAddress(DeliveryAddressRequestDto requestDto, User user) {
 
         validateRequest(requestDto);
 

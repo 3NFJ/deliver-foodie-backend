@@ -9,7 +9,6 @@ import java.util.UUID;
 
 @Getter
 public class DeliveryAddressRequestDto {
-    private Long userId;
     private String addressName;
     private String streetAddress;
     private String detailAddress;
