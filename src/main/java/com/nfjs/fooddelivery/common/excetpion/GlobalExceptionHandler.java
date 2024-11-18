@@ -95,4 +95,14 @@ public class GlobalExceptionHandler {
             e.getMessage()
         ));
   }
+
+  @ExceptionHandler(ReviewException.class)
+  public ResponseEntity<ErrorResponse> handleReviewException(ReviewException e) {
+    return ResponseEntity
+            .status(e.getErrorCode().getStatus())
+            .body(new ErrorResponse(
+                    e.getErrorCode().getStatus().value(),
+                    e.getMessage()
+            ));
+  }
 }
