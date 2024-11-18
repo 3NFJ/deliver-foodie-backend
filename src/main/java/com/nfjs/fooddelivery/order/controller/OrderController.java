@@ -1,5 +1,7 @@
 package com.nfjs.fooddelivery.order.controller;
 
+import com.nfjs.fooddelivery.common.excetpion.ErrorCode;
+import com.nfjs.fooddelivery.common.excetpion.OrderException;
 import com.nfjs.fooddelivery.order.dto.*;
 import com.nfjs.fooddelivery.order.service.OrderService;
 import com.nfjs.fooddelivery.security.UserDetailsImpl;
@@ -51,12 +53,18 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
     
-    @GetMapping("/orders/")
+    @GetMapping("/orders")
     public ResponseEntity<List<OrderGetResponseDto>> getOrderList(
-            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestParam("page") int page,
+            @RequestParam("size") int size) {
 
         log.info("주문 목록 조회 URL 맵핑 : OK");
-        List<OrderGetResponseDto> responseDto = orderService.getOrderList(userDetails);
+
+        if(!(size==10 || size==30 || size==50))
+            throw new OrderException(ErrorCode.INVALID_INPUT_VALUE);
+
+        List<OrderGetResponseDto> responseDto = orderService.getOrderList(userDetails,page-1,size);
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 

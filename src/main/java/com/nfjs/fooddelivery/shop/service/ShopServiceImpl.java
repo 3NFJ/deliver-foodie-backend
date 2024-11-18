@@ -11,6 +11,9 @@ import com.nfjs.fooddelivery.shop.repository.ShopRepository;
 import com.nfjs.fooddelivery.user.entity.User;
 import com.nfjs.fooddelivery.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +23,7 @@ import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ShopServiceImpl implements ShopService {
     private final ShopRepository shopRepository;
     private final UserRepository userRepository;
@@ -51,7 +55,7 @@ public class ShopServiceImpl implements ShopService {
     @Override
     @Transactional
     public ShopResponseDto updateShop(UUID shopId, ShopRequestDto requestDto) {
-        Shop entity = shopRepository.findById(shopId).orElseThrow(() -> new NullPointerException("가게 정보를 찾을 수 없습니다."));
+        Shop entity = shopRepository.findById(shopId).orElseThrow(() -> new IllegalStateException(ErrorCode.SHOP_NOT_FOUND.getMessage()));
         Category category = categoryRepository.findById(requestDto.categoryId()).orElseThrow();
 
         String shopName = requestDto.name();
@@ -62,5 +66,33 @@ public class ShopServiceImpl implements ShopService {
         entity.update(requestDto, category);
 
         return ShopResponseDto.from(entity);
+    }
+
+    @Override
+    @Transactional
+    public void deleteShop(UUID shopId, Long userId) {
+        Shop shop = shopRepository.findById(shopId).orElseThrow(() -> new IllegalStateException(ErrorCode.SHOP_NOT_FOUND.getMessage()));
+
+        if (!shop.getUser().getUserId().equals(userId)) {
+            throw new ShopException(ErrorCode.USER_NOT_MATCH);
+        }
+
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalStateException(ErrorCode.USER_NOT_FOUND.getMessage()));
+
+        shop.delete(user.getUsername());
+    }
+
+    @Override
+    public Page<ShopResponseDto> getShopList(Pageable pageable) {
+        Page<Shop> shopList = shopRepository.findAllNonDeletedShops(pageable);
+
+        return shopList.map(ShopResponseDto::from);
+    }
+
+    @Override
+    public ShopResponseDto getShopDetail(UUID shopId) {
+        Shop shop = shopRepository.findByShopIdAndDeletedAtIsNull(shopId).orElseThrow(() -> new IllegalStateException(ErrorCode.SHOP_NOT_FOUND.getMessage()));
+
+        return ShopResponseDto.from(shop);
     }
 }

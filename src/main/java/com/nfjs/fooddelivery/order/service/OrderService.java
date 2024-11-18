@@ -14,7 +14,7 @@ public interface OrderService {
 
     OrderGetStatusResponseDto getOrderStatus(UUID orderId, UserDetails userDetails);
 
-    List<OrderGetResponseDto> getOrderList(UserDetails userDetails);
-
     OrderGetDetailResponseDto getOrderDetail(UUID orderId, UserDetails userDetails);
+  
+    List<OrderGetResponseDto> getOrderList(UserDetails userDetails, int page, int size);
 }

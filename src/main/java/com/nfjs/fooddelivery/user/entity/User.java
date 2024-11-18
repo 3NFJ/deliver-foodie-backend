@@ -50,8 +50,19 @@ public class User extends BaseEntity {
   @Enumerated(value = EnumType.STRING)
   private UserRoleEnum role;
 
-  @Column(name = "token_created_at")
+  @Column(name = "token_created_at", nullable = true) // 최초 회원가입시 null
   private LocalDateTime tokenCreatedAt;
+
+  public void updateTokenCreatedAt(LocalDateTime time) {  // 토큰 생성 시간 업데이트
+    this.tokenCreatedAt = time;
+  }
+
+  public boolean isValidTokenCreatedAt() { // 토큰 생성 시간 유효성 검증
+    if (this.tokenCreatedAt == null) {
+      return false;
+    }
+    return this.tokenCreatedAt.plusDays(7).isAfter(LocalDateTime.now());
+  }
 
   @PrePersist
   public void generateUserNumber() {
