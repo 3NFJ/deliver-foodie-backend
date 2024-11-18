@@ -13,6 +13,8 @@ import com.nfjs.fooddelivery.user.entity.User;
 import com.nfjs.fooddelivery.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -84,11 +86,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<OrderGetResponseDto> getOrderList(UserDetails userDetails) {
+    public List<OrderGetResponseDto> getOrderList(UserDetails userDetails, int page, int size) {
 
         log.info("주문 목록 조회 서비스 호출 : START");
         User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow();
-        List<Order> orders = orderRepository.findAllByUserOrderByCreatedAtDesc(user);
+        Page<Order> orders = orderRepository.findAllByUserOrderByCreatedAtDesc(user,PageRequest.of(page,size));
 
         log.info("주문 목록 담기 : START");
         List<OrderGetResponseDto> orderGetListResponseDto = new ArrayList<>();

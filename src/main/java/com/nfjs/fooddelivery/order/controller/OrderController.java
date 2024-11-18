@@ -51,12 +51,14 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
     
-    @GetMapping("/orders/")
+    @GetMapping("/orders")
     public ResponseEntity<List<OrderGetResponseDto>> getOrderList(
-            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestParam("page") int page,
+            @RequestParam("size") int size) {
 
         log.info("주문 목록 조회 URL 맵핑 : OK");
-        List<OrderGetResponseDto> responseDto = orderService.getOrderList(userDetails);
+        List<OrderGetResponseDto> responseDto = orderService.getOrderList(userDetails,page-1,size);
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 }
