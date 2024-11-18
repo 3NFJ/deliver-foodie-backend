@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
+import static com.nfjs.fooddelivery.common.excetpion.ErrorCode.MENU_NOT_FOUNT;
 import static com.nfjs.fooddelivery.common.excetpion.ErrorCode.*;
 
 @Service
@@ -27,15 +28,14 @@ public class MenuServiceImpl implements MenuService {
     private final MenuRepository menuRepository;
     private final MenuValidation menuValidation;
     private final ShopRepository shopRepository;
-    private final UserRepository userRepository;
 
 
     @Override
-    public MenuResponseDto addMenu(UUID shopId, MenuAddRequestDto requestDto) {
+    public MenuResponseDto addMenu(UUID shopId, MenuAddRequestDto requestDto, User user) {
         //shop 유효성 검증
         Shop shop = shopRepository.findById(shopId).orElseThrow();
 
-        menuValidation.addMenuValidation(requestDto, shopId);
+        menuValidation.addMenuValidation(requestDto, shopId, user);
 
         Menu entity = menuRepository.save(requestDto.toEntity(shop));
 
@@ -44,9 +44,8 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     @Transactional
-    public MenuResponseDto updateMenu(UUID menuId, MenuUpdateRequestDto requestDto) {
-        Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new MenuException(MENU_NOT_FOUND));
-        User user = userRepository.findById(requestDto.userId()).orElseThrow(() -> new MenuException(USER_NOT_FOUND));
+    public MenuResponseDto updateMenu(UUID menuId, MenuUpdateRequestDto requestDto, User user) {
+        Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new MenuException(MENU_NOT_FOUNT));
 
         menuValidation.updateValidation(requestDto, user);
 
