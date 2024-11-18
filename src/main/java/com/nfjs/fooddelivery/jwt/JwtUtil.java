@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.Date;
+import java.util.UUID;
 import javax.crypto.SecretKey;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,12 +42,12 @@ public class JwtUtil {
     key = Keys.hmacShaKeyFor(bytes);
   }
 
-  public String createAccessToken(String username, UserRoleEnum role) {
+  public String createAccessToken(UUID userNumber, UserRoleEnum role) {
     Date date = new Date();
 
     return BEARER_PREFIX +
         Jwts.builder()
-            .subject(username)
+            .subject(userNumber.toString())
             .claim(AUTHORIZATION_KEY, role)
             .claim("tokenType", "ACCESS")
             .expiration(new Date(date.getTime() + ACCESS_TOKEN_TIME))
@@ -55,12 +56,12 @@ public class JwtUtil {
             .compact();
   }
 
-  public String createRefreshToken(String username, UserRoleEnum role) {
+  public String createRefreshToken(UUID userNumber, UserRoleEnum role) {
     Date date = new Date();
 
     return BEARER_PREFIX +
         Jwts.builder()
-            .subject(username)
+            .subject(userNumber.toString())
             .claim(AUTHORIZATION_KEY, role)
             .claim("tokenType", "REFRESH")
             .expiration(new Date(date.getTime() + REFRESH_TOKEN_TIME))
@@ -113,5 +114,10 @@ public class JwtUtil {
         .build()
         .parseSignedClaims(token)
         .getPayload();
+  }
+
+  public UUID getUserNumberFromToken(String token) {
+    Claims claims = getUserInfoFromToken(token);
+    return UUID.fromString(claims.getSubject());
   }
 }

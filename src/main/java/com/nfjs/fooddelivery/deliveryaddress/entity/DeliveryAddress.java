@@ -4,6 +4,7 @@ import com.nfjs.fooddelivery.common.entity.BaseEntity;
 import com.nfjs.fooddelivery.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import java.util.UUID;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Table(name = "p_delivery_addresses")
 public class DeliveryAddress extends BaseEntity {
 
@@ -38,4 +40,13 @@ public class DeliveryAddress extends BaseEntity {
 
     @Column(name = "is_default", nullable = false)
     private Boolean isDefault;
+
+    public DeliveryAddress(User user, String addressName, String streetAddress, String detailAddress, Integer postalAddress, Boolean isDefault) {
+        this.user = user;
+        this.addressName = addressName;
+        this.streetAddress = streetAddress;
+        this.detailAddress = detailAddress;
+        this.postalAddress = postalAddress;
+        this.isDefault = isDefault;
+    }
 }

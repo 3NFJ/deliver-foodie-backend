@@ -43,6 +43,13 @@ public class GlobalExceptionHandler {
         .body(new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), "잘못된 인증 정보입니다."));
   }
 
+    @ExceptionHandler(OrderException.class)
+    public ResponseEntity<ErrorResponse> handleOrderException(OrderException e) {
+        return ResponseEntity.status(e.getErrorCode()
+                        .getStatus())
+                .body(new ErrorResponse(e.getErrorCode().getStatus().value(), e.getMessage()));
+    }
+    
   // Validation 예외 처리
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<ErrorResponse> handleValidationException(MethodArgumentNotValidException e) {
@@ -88,6 +95,16 @@ public class GlobalExceptionHandler {
 
   @ExceptionHandler(MenuException.class)
   public ResponseEntity<ErrorResponse> handleMenuException(MenuException e) {
+    return ResponseEntity
+        .status(e.getErrorCode().getStatus())
+        .body(new ErrorResponse(
+            e.getErrorCode().getStatus().value(),
+            e.getMessage()
+        ));
+  }
+
+  @ExceptionHandler(UserException.class)
+  public ResponseEntity<ErrorResponse> handleUserException(UserException e) {
     return ResponseEntity
         .status(e.getErrorCode().getStatus())
         .body(new ErrorResponse(

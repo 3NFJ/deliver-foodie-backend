@@ -3,9 +3,9 @@ package com.nfjs.fooddelivery.shop.service;
 import com.nfjs.fooddelivery.shop.dto.ShopRequestDto;
 import com.nfjs.fooddelivery.shop.dto.ShopResponseDto;
 import com.nfjs.fooddelivery.user.entity.User;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.UUID;
 
 public interface ShopService {
@@ -16,7 +16,7 @@ public interface ShopService {
 
     void deleteShop(UUID shopId, User userId);
 
-    List<ShopResponseDto> getShopList(Pageable pageable);
+    Page<ShopResponseDto> getShopList(Pageable pageable);
 
     ShopResponseDto getShopDetail(UUID shopId);
 }
