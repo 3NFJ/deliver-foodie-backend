@@ -42,7 +42,7 @@ public class ReviewController {
     }
 
     @GetMapping("/reviews/{reviewId}")
-    public ResponseEntity<ReviewGetResponseDto> getReviewList(
+    public ResponseEntity<ReviewGetResponseDto> getReview(
             @PathVariable UUID reviewId,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
