@@ -33,7 +33,7 @@ public class ShopServiceImpl implements ShopService {
         // 회원 검증
         Category category = categoryRepository.findById(requestDto.categoryId()).orElseThrow();
         if (user.getRole().equals(UserRoleEnum.CUSTOMER)) {
-            throw new ShopException(ErrorCode.MENU_PERMISSION_DENIED);
+            throw new ShopException(ErrorCode.SHOP_PERMISSION_DENIED);
         }
 
         String shopName = requestDto.name();
@@ -59,7 +59,7 @@ public class ShopServiceImpl implements ShopService {
         Shop entity = shopRepository.findById(shopId).orElseThrow(() -> new ShopException(ErrorCode.SHOP_NOT_FOUND));
         Category category = categoryRepository.findById(requestDto.categoryId()).orElseThrow();
         if (user.getRole().equals(UserRoleEnum.CUSTOMER)) {
-            throw new ShopException(ErrorCode.MENU_PERMISSION_DENIED);
+            throw new ShopException(ErrorCode.SHOP_PERMISSION_DENIED);
         }
 
         String shopName = requestDto.name();
@@ -78,7 +78,7 @@ public class ShopServiceImpl implements ShopService {
         Shop shop = shopRepository.findById(shopId).orElseThrow(() -> new ShopException(ErrorCode.SHOP_NOT_FOUND));
 
         if (!shop.getUser().getUserId().equals(user.getUserId())) {
-            throw new ShopException(ErrorCode.MENU_PERMISSION_DENIED);
+            throw new ShopException(ErrorCode.SHOP_PERMISSION_DENIED);
         }
 
         shop.delete(user.getUsername());

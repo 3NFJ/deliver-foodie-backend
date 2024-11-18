@@ -24,7 +24,7 @@ public class MenuValidation {
 
     public void addMenuValidation(MenuAddRequestDto requestDto, UUID shopId, User user) {
         if (user.getRole().equals(UserRoleEnum.CUSTOMER)) {
-            throw new MenuException(MENU_PERMISSION_DENIED);
+            throw new MenuException(SHOP_PERMISSION_DENIED);
         }
 
         if (!Pattern.matches("^[a-zA-Z가-힣0-9]+$", requestDto.menuName())) {
@@ -45,7 +45,7 @@ public class MenuValidation {
 
     public void updateValidation(MenuUpdateRequestDto requestDto, User user) {
         if (user.getRole().equals(UserRoleEnum.CUSTOMER)) {
-            throw new MenuException(MENU_PERMISSION_DENIED);
+            throw new MenuException(SHOP_PERMISSION_DENIED);
         }
 
         if (!Pattern.matches("^[a-zA-Z가-힣0-9]+$", requestDto.menuName())) {
