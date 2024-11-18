@@ -16,6 +16,67 @@
 
 ### 서비스 구성 및 실행방법
 
+### 필수 요구사항
+- Java 17
+- PostgreSQL 15
+- AWS 계정 (S3 사용)
+- Gemini API Key
+
+### 1. 프로젝트 클론
+```bash
+git clone https://github.com/3NFJ/deliver-foodie-backend.git
+cd deliver-foodie-backend
+```
+
+2. 환경변수 설정
+application.yml 파일 생성 및 설정
+```
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/your_database
+    username: your_username
+    password: your_password
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+aws:
+  s3:
+    access-key: your_aws_access_key
+    secret-key: your_aws_secret_key
+    bucket: your_bucket_name
+    region: ap-northeast-2
+
+jwt:
+  secret: your_jwt_secret_key
+
+ai:
+  url: your_url
+  key: your_gemini_api_key
+```
+
+3. Docker를 사용한 데이터베이스 설정
+```
+docker run --name postgres-container \
+  -e POSTGRES_DB=your_database \
+  -e POSTGRES_USER=your_username \
+  -e POSTGRES_PASSWORD=your_password \
+  -p 5432:5432 \
+  -d postgres:15
+```
+
+5. 프로젝트 빌드
+```
+./gradlew clean build
+```
+
+5. 애플리케이션 실행
+```
+./gradlew bootRun
+```
+
 ### 주요 기능
 1. **회원 관리**
 - 회원가입 기능
@@ -37,7 +98,7 @@
   - 모든 사용자는 가게별 메뉴를 조회할 수 있다.
    
 4. **주문 관리**
-   - 고객은 주문
+   - 고객은 원하는 가게의 메뉴를 담아 주문할 수 있다.
    - 고객은 실시간 주문 상태를 확인할 수 있다.
    - 주문 확인 중인 주문은 취소할 수 없다.
 
