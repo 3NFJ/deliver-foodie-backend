@@ -5,6 +5,7 @@ import com.nfjs.fooddelivery.menu.dto.MenuResponseDto;
 import com.nfjs.fooddelivery.menu.dto.MenuUpdateRequestDto;
 import com.nfjs.fooddelivery.menu.service.MenuService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -12,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -43,11 +43,11 @@ public class MenuController {
     }
 
     @GetMapping("/shops/{shopId}/menus")
-    public ResponseEntity<List<MenuResponseDto>> getMenuList(@PathVariable UUID shopId,
+    public ResponseEntity<Page<MenuResponseDto>> getMenuList(@PathVariable UUID shopId,
                                                        @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Sort.Direction.DESC)
                                                        Pageable pageable) {
 
-        List<MenuResponseDto> menuList = menuService.getMenuList(shopId, pageable);
+        Page<MenuResponseDto> menuList = menuService.getMenuList(shopId, pageable);
 
         return ResponseEntity.status(HttpStatus.OK).body(menuList);
     }

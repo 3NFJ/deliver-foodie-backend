@@ -17,7 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
 
 import static com.nfjs.fooddelivery.common.excetpion.ErrorCode.*;
@@ -70,13 +69,11 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public List<MenuResponseDto> getMenuList(UUID shopId, Pageable pageable) {
+    public Page<MenuResponseDto> getMenuList(UUID shopId, Pageable pageable) {
         //todo shop 브랜치 병합 시 예외 처리
         Shop shop = shopRepository.findById(shopId).orElseThrow();
         Page<Menu> menus = menuRepository.findAllByShop(shop, pageable);
 
-        return menus.stream()
-                .map(MenuResponseDto::from)
-                .toList();
+        return menus.map(MenuResponseDto::from);
     }
 }
