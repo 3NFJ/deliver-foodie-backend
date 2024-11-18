@@ -3,10 +3,7 @@ package com.nfjs.fooddelivery.review.service;
 import com.nfjs.fooddelivery.deliveryaddress.entity.DeliveryAddress;
 import com.nfjs.fooddelivery.order.entity.Order;
 import com.nfjs.fooddelivery.order.repository.OrderRepository;
-import com.nfjs.fooddelivery.review.dto.ReviewCreateRequestDto;
-import com.nfjs.fooddelivery.review.dto.ReviewCreateResponseDto;
-import com.nfjs.fooddelivery.review.dto.ReviewModifyRequestDto;
-import com.nfjs.fooddelivery.review.dto.ReviewModifyResponseDto;
+import com.nfjs.fooddelivery.review.dto.*;
 import com.nfjs.fooddelivery.review.entity.Review;
 import com.nfjs.fooddelivery.review.repository.ReviewRepository;
 import com.nfjs.fooddelivery.shop.entitiy.Shop;
@@ -60,5 +57,17 @@ public class ReviewServiceImpl implements ReviewService {
 
         log.info("리뷰 수정 서비스 호출 : END");
         return new ReviewModifyResponseDto(review);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ReviewGetResponseDto getReview(UUID reviewId, UserDetails userDetails) {
+
+        log.info("리뷰 조회 서비스 호출 : START");
+        User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow();
+        Review review = reviewRepository.findById(reviewId).orElseThrow();
+
+        log.info("리뷰 조회 서비스 호출 : END");
+        return new ReviewGetResponseDto(review);
     }
 }

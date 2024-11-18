@@ -1,5 +1,6 @@
 package com.nfjs.fooddelivery.review.controller;
 
+import com.nfjs.fooddelivery.review.dto.*;
 import com.nfjs.fooddelivery.review.dto.ReviewCreateRequestDto;
 import com.nfjs.fooddelivery.review.dto.ReviewCreateResponseDto;
 import com.nfjs.fooddelivery.review.dto.ReviewModifyRequestDto;
@@ -41,6 +42,16 @@ public class ReviewController {
 
         log.info("리뷰 수정 URL 맵핑 : OK");
         ReviewModifyResponseDto responseDto = reviewService.modifyReview(reviewId,reviewModifyRequestDto,userDetails);
+        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+    }
+  
+    @GetMapping("/reviews/{reviewId}")
+    public ResponseEntity<ReviewGetResponseDto> getReview(
+            @PathVariable UUID reviewId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        log.info("리뷰 조회 URL 맵핑 : OK");
+        ReviewGetResponseDto responseDto = reviewService.getReview(reviewId,userDetails);
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 }
