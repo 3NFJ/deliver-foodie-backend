@@ -11,6 +11,7 @@ import com.nfjs.fooddelivery.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -32,7 +33,7 @@ public class AuthController {
   public ResponseEntity<SignupResponseDto> signup(@RequestBody @Valid SignupRequestDto request) {
     SignupResponseDto response = userService.signupUser(request);
 
-    return ResponseEntity.ok(response);
+    return ResponseEntity.status(HttpStatus.CREATED).body(response);
   }
 
   @PostMapping("/signin")
