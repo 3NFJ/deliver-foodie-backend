@@ -4,7 +4,7 @@
 ### 프로젝트 개요
 > **음식 배달 플랫폼 "Deliver Foodie"** <br>
 > 사장님과 고객을 연결하는 배달 서비스 플랫폼으로, 편리한 주문과 효율적인 가게 관리를 제공합니다.
-> 개발 기간: 2024.11.06 ~ 2024.11.18 (2주)
+> <br>개발 기간: 2024.11.06 ~ 2024.11.18 (2주)
 
 ## 👥 팀원 소개 및 역할 분담
 
@@ -18,13 +18,13 @@
 ![Infra](./src/main/resources/static/images/infra.png)
 
 ### 서비스 구성 및 실행방법
-### 필수 요구사항
+#### 필수 요구사항
 - Java 17
 - PostgreSQL 15
 - AWS 계정 (S3 사용)
 - Gemini API Key
 
-### 1. 프로젝트 클론
+#### 1. 프로젝트 클론
 ```bash
 git clone https://github.com/3NFJ/deliver-foodie-backend.git
 cd deliver-foodie-backend
@@ -79,7 +79,7 @@ docker run --name postgres-container \
 ./gradlew bootRun
 ```
 
-### 주요 기능
+#### 주요 기능
 1. **회원 관리**
 - 회원가입 기능
     - 사용자는 회원가입 후 사용할 수 있다.
@@ -142,7 +142,7 @@ docker run --name postgres-container \
 📎 [전체 API 명세서 보러가기](https://docs.google.com/spreadsheets/d/1yKGRcgBnM2Gkw5XtqhH6qAzK9ZK9LEC4cRE_j-BvcyE/edit?gid=603954509#gid=603954509)
 
 ### 테이블 명세서
-📎 [전체 API 명세서 보러가기](https://docs.google.com/spreadsheets/d/1yKGRcgBnM2Gkw5XtqhH6qAzK9ZK9LEC4cRE_j-BvcyE/edit?gid=1640232430#gid=1640232430)
+📎 [테이블 명세서 보러가기](https://docs.google.com/spreadsheets/d/1yKGRcgBnM2Gkw5XtqhH6qAzK9ZK9LEC4cRE_j-BvcyE/edit?gid=1640232430#gid=1640232430)
 
 ### 진행 일정 및 상세 정보 확인하기
 📎 [3NFJ 팀 시트](https://docs.google.com/spreadsheets/d/1yKGRcgBnM2Gkw5XtqhH6qAzK9ZK9LEC4cRE_j-BvcyE/edit?gid=0#gid=0)
